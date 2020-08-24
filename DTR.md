@@ -1,4 +1,5 @@
-# Group Member Names: Kate Tester and Carson Jardine
+# Group Member Names: 
+## Kate Tester and Carson Jardine
 
 ## Goals and Expectations for the Project (What does each group member hope to get out of this project? What do we want to achieve as a team? How will we know that we're successful?):
   - Learning to pair over Github and Atom
