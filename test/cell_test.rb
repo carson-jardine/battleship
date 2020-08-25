@@ -33,19 +33,11 @@ class CellTest < Minitest::Test
     @cell.place_ship(cruiser)
 
     assert_equal false, @cell.fired_upon?
+
+    @cell.fire_upon
+
+    assert_equal 2, @cell.ship.health
+    assert @cell.fired_upon?
   end
-# # => #<Ship:0x00007f84f0891238...>
-#
-# cell.place_ship(cruiser)
-#
-# cell.fired_upon?
-# # => false
-#
-# cell.fire_upon
-#
-# cell.ship.health
-# # => 2
-#
-# cell.fired_upon?
-# # => true
+
 end
