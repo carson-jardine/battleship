@@ -40,4 +40,51 @@ class CellTest < Minitest::Test
     assert @cell.fired_upon?
   end
 
+  def test_it_can_render
+    cell_1 = Cell.new("B4")
+
+    assert_equal '.', cell_1.render
+
+    cell_1.fire_upon
+
+    assert_equal "M", cell_1.render
+
+    cell_2 = Cell.new("C3")
+    cruiser = Ship.new("Cruiser", 3)
+
+    cell_2.place_ship(cruiser)
+
+    assert_equal '.', cell_2.render
+  end
+
+  def test_it_can_render_optional_arg
+    cell_2 = Cell.new("C3")
+    cruiser = Ship.new("Cruiser", 3)
+
+    cell_2.place_ship(cruiser)
+
+    assert_equal "S", cell_2.render(true)
+  end
+
+  # Indicate that we want to show a ship with the optional argument
+  # cell_2.render(true)
+  # => "S"
+
+  # cell_2.fire_upon
+
+  # cell_2.render
+  # => "H"
+
+  # cruiser.sunk?
+  # => false
+
+  # cruiser.hit
+
+  # cruiser.hit
+
+  # cruiser.sunk?
+  # => true
+
+  # cell_2.render
+  # => "X"
 end
