@@ -1,11 +1,11 @@
 class Board
 
   def initialize
-    @cells = Hash.new
+    @cells = cells
   end
 
   def cells
-    {
+    @cells = {
       "A1" => Cell.new("A1"),
       "A2" => Cell.new("A2"),
       "A3" => Cell.new("A3"),
@@ -25,4 +25,7 @@ class Board
     }
   end
 
+  def valid_coordinate?(cell)
+    @cells.keys.include?(cell)
+  end
 end
