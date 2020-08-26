@@ -29,7 +29,33 @@ class Board
     @cells.keys.include?(cell)
   end
 
-  def valid_placement?(ship, coords)
-    ship.length == coords.length
+  def valid_placement?(ship, coord_array)
+    if ship.length != coord_array.length
+      false
+    else
+      consecutive_spaces?(coord_array)
+    end
+  end
+
+  def consecutive_spaces?(coord_array)
+    split_letter = coord_array.map { |coord| coord.split(//).shift }
+    split_num = coord_array.map { |coord| (coord.split(//)[1]).to_i }
+    if split_letter.all? { |letter| letter == split_letter[0] }
+      if split_num.each_cons(2).all? { |x, y| x == y - 1 }
+        true
+      else
+        false
+      end
+    else
+      if split_letter.each_cons(2).all? { |x, y| x.ord == y.ord - 1 }
+        if split_num.all? { |num| num == split_num[0] }
+          true
+        else
+          false
+        end
+      else
+        false
+      end
+    end
   end
 end
