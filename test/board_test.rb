@@ -89,10 +89,64 @@ class BoardTest < Minitest::Test
 
   def test_it_can_render_true
     @board.place(@cruiser, ["A1", "A2", "A3"])
-
-    expected = "  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n"
+    @board.place(@submarine, ["B2", "C2"])
+    expected = "  1 2 3 4 \nA S S S . \nB . S . . \nC . S . . \nD . . . . \n"
 
     assert_equal expected, @board.render(true)
   end
 
+  def test_it_can_render_board_after_hit
+    @board.place(@cruiser, ["A1", "A2", "A3"])
+    @board.cells["A2"].fire_upon
+
+    expected =  "  1 2 3 4 \nA . H . . \nB . . . . \nC . . . . \nD . . . . \n"
+    expected_true =  "  1 2 3 4 \nA S H S . \nB . . . . \nC . . . . \nD . . . . \n"
+
+    assert_equal expected, @board.render
+    assert_equal expected_true, @board.render(true)
+  end
+
+  def test_it_can_render_board_after_miss
+    @board.place(@cruiser, ["A1", "A2", "A3"])
+    @board.cells["D2"].fire_upon
+
+    expected =  "  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . M . . \n"
+    expected_true =  "  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . M . . \n"
+
+    assert_equal expected, @board.render
+    assert_equal expected_true, @board.render(true)
+  end
+
+  def test_it_can_render_after_ship_sunk
+    @board.place(@cruiser, ["A1", "A2", "A3"])
+    @board.place(@submarine, ["B2", "C2"])
+
+    @board.cells["A1"].fire_upon
+    @board.cells["A2"].fire_upon
+    @board.cells["A3"].fire_upon
+
+
+    expected =  "  1 2 3 4 \nA X X X . \nB . . . . \nC . . . . \nD . . . . \n"
+    expected_true =  "  1 2 3 4 \nA X X X . \nB . S . . \nC . S . . \nD . . . . \n"
+
+    assert_equal expected, @board.render
+    assert_equal expected_true, @board.render(true)
+  end
+
+  def test_it_can_render_board_in_middle_of_game
+    @board.place(@cruiser, ["A1", "A2", "A3"])
+    @board.place(@submarine, ["B2", "C2"])
+
+    @board.cells["A1"].fire_upon
+    @board.cells["A2"].fire_upon
+    @board.cells["A3"].fire_upon
+    @board.cells["D3"].fire_upon
+    @board.cells["B2"].fire_upon
+
+    expected =  "  1 2 3 4 \nA X X X . \nB . H . . \nC . . . . \nD . . M . \n"
+    expected_true =  "  1 2 3 4 \nA X X X . \nB . H . . \nC . S . . \nD . . M . \n"
+
+    assert_equal expected, @board.render
+    assert_equal expected_true, @board.render(true)
+  end
 end

@@ -31,7 +31,7 @@ class Board
   end
 
   def valid_placement?(ship, coord_array)
-    #return false if
+    #refactor to return false if
     if ship.length != coord_array.length
       false
     elsif invalid_coord_array_input(coord_array)
@@ -43,19 +43,25 @@ class Board
     end
   end
 
+  def split_letter(coord_array)
+    coord_array.map { |coord| coord.split('').shift }
+  end
+
+  def split_num(coord_array)
+    coord_array.map { |coord| (coord.split('')[1]).to_i }
+  end
+
   def consecutive_spaces?(coord_array)
     #refactor to shorten
-    split_letter = coord_array.map { |coord| coord.split('').shift }
-    split_num = coord_array.map { |coord| (coord.split('')[1]).to_i }
-    if split_letter.all? { |letter| letter == split_letter[0] }
-      if split_num.each_cons(2).all? { |x, y| x == y - 1 }
+    if split_letter(coord_array).all? { |letter| letter == split_letter(coord_array)[0] }
+      if split_num(coord_array).each_cons(2).all? { |x, y| x == y - 1 }
         true
       else
         false
       end
     else
-      if split_letter.each_cons(2).all? { |x, y| x.ord == y.ord - 1 }
-        if split_num.all? { |num| num == split_num[0] }
+      if split_letter(coord_array).each_cons(2).all? { |x, y| x.ord == y.ord - 1 }
+        if split_num(coord_array).all? { |num| num == split_num(coord_array)[0] }
           true
         else
           false
@@ -76,9 +82,7 @@ class Board
 
   def place(ship, coord_array)
     if valid_placement?(ship, coord_array)
-      coord_array.each do |coord|
-        @cells[coord].place_ship(ship)
-      end
+      coord_array.each { |coord| @cells[coord].place_ship(ship)}
     end
   end
 
