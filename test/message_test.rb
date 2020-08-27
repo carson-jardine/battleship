@@ -66,18 +66,19 @@ class MessageTest < Minitest::Test
     cell_1 = Cell.new("A4")
     cell_2 = Cell.new("C4")
     cell_3 = Cell.new("D4")
-    # cell_1.fire_upon
+    cell_1.fire_upon
 
     expected = "Your shot on A4 was a miss."
     assert_equal expected, @message.hooman_shot_results(cell_1)
 
     cell_2.place_ship(cruiser)
-    # cell_1.fire_upon
+    cell_2.fire_upon
     expected = "Your shot on C4 was a hit."
 
     assert_equal expected, @message.hooman_shot_results(cell_2)
 
     cell_3.place_ship(sub)
+    cell_3.fire_upon
     sub.hit
     expected = "Your shot on D4 was a hit, the ship is sunk."
 
@@ -89,7 +90,7 @@ class MessageTest < Minitest::Test
     cell_1.fire_upon
     cell_1.fire_upon
 
-    expected = "You already fired there. Try again"
+    expected = "Your shot on B4 was a failure. You already fired there. Try again."
     assert_equal expected, @message.hooman_shot_results(cell_1)
   end
 
