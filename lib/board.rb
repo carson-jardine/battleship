@@ -33,6 +33,10 @@ class Board
   def valid_placement?(ship, coord_array)
     if ship.length != coord_array.length
       false
+    elsif invalid_coord_array_input(coord_array)
+      false 
+    elsif coord_is_occupied(coord_array)
+      false
     else
       consecutive_spaces?(coord_array)
     end
@@ -58,6 +62,14 @@ class Board
         false
       end
     end
+  end
+
+  def invalid_coord_array_input(coord_array)
+    coord_array.any? { |coord| !valid_coordinate?(coord)}
+  end
+
+  def coord_is_occupied(coord_array)
+    coord_array.any? { |coord| @cells[coord].ship}
   end
 
   def place(ship, coord_array)
