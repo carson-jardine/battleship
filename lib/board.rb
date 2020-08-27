@@ -31,10 +31,11 @@ class Board
   end
 
   def valid_placement?(ship, coord_array)
+    #return false if
     if ship.length != coord_array.length
       false
     elsif invalid_coord_array_input(coord_array)
-      false 
+      false
     elsif coord_is_occupied(coord_array)
       false
     else
@@ -77,6 +78,22 @@ class Board
       coord_array.each do |coord|
         @cells[coord].place_ship(ship)
       end
+    end
+  end
+
+  def render_helper
+    "  1 2 3 4 \nA #{@cells["A1"].render} #{@cells["A2"].render} #{@cells["A3"].render} #{@cells["A4"].render} \nB #{@cells["B1"].render} #{@cells["B2"].render} #{@cells["B3"].render} #{@cells["B4"].render} \nC #{@cells["C1"].render} #{@cells["C2"].render} #{@cells["C3"].render} #{@cells["C4"].render} \nD #{@cells["D1"].render} #{@cells["D2"].render} #{@cells["D3"].render} #{@cells["D4"].render}"
+  end
+
+  def render_true_helper
+       "  1 2 3 4 \nA #{@cells["A1"].render(true)} #{@cells["A2"].render(true)} #{@cells["A3"].render(true)} #{@cells["A4"].render(true)} \nB #{@cells["B1"].render(true)} #{@cells["B2"].render(true)} #{@cells["B3"].render(true)} #{@cells["B4"].render(true)} \nC #{@cells["C1"].render(true)} #{@cells["C2"].render(true)} #{@cells["C3"].render(true)} #{@cells["C4"].render(true)} \nD #{@cells["D1"].render(true)} #{@cells["D2"].render(true)} #{@cells["D3"].render(true)} #{@cells["D4"].render(true)}"
+  end
+
+  def render(show_ship = false)
+    unless show_ship == true
+      return render_helper
+    else
+      return render_true_helper
     end
   end
 
