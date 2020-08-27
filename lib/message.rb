@@ -36,16 +36,22 @@ class Message
 
   def hooman_shot_results(cell)
     shot_type = nil
-    if cell.render == "M"
-      shot_type = "miss"
-    elsif cell.render == "X"
-      shot_type = "hit, the ship is sunk"
-    elsif cell.render == "H"
-      shot_type = "hit"
+    if cell.fired_upon?
+      p "You already fired there. Try again"
     else
-      shot_type = "WTF PPL"
+      cell.fire_upon
+      if cell.render == "M"
+        shot_type = "miss"
+      elsif cell.render == "X"
+        shot_type = "hit, the ship is sunk"
+      elsif cell.render == "H"
+        shot_type = "hit"
+      else
+        shot_type = "WTF PPL"
+      end
+      p "Your shot on #{cell.coordinate} was a #{shot_type}."
     end
-    p "Your shot on #{cell.coordinate} was a #{shot_type}."
+
   end
 
 end

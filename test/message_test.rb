@@ -62,22 +62,34 @@ class MessageTest < Minitest::Test
 
   def test_message_to_hooman_shot
     cruiser = Ship.new("Cruiser", 3)
+    sub = Ship.new("Submarine", 2)
     cell_1 = Cell.new("A4")
-    cell_1.fire_upon
+    cell_2 = Cell.new("C4")
+    cell_3 = Cell.new("D4")
+    # cell_1.fire_upon
 
     expected = "Your shot on A4 was a miss."
     assert_equal expected, @message.hooman_shot_results(cell_1)
 
-    cell_1.place_ship(cruiser)
+    cell_2.place_ship(cruiser)
+    # cell_1.fire_upon
+    expected = "Your shot on C4 was a hit."
+
+    assert_equal expected, @message.hooman_shot_results(cell_2)
+
+    cell_3.place_ship(sub)
+    sub.hit
+    expected = "Your shot on D4 was a hit, the ship is sunk."
+
+    assert_equal expected, @message.hooman_shot_results(cell_3)
+  end
+
+  def test_repeated_shot_on_cell_message
+    cell_1 = Cell.new("B4")
     cell_1.fire_upon
-    expected = "Your shot on A4 was a hit."
+    cell_1.fire_upon
 
-    assert_equal expected, @message.hooman_shot_results(cell_1)
-
-    cruiser.hit
-    cruiser.hit
-    expected = "Your shot on A4 was a hit, the ship is sunk."
-
+    expected = "You already fired there. Try again"
     assert_equal expected, @message.hooman_shot_results(cell_1)
   end
 
