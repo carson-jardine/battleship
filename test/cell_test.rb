@@ -75,4 +75,18 @@ class CellTest < Minitest::Test
     assert_equal "X", cell_2.render
   end
 
+  def test_counting_shots_fired_on_cell
+    cell_1 = Cell.new("D1")
+
+    assert_equal 0, cell_1.shots_fired
+
+    cell_1.fire_upon
+
+    assert_equal 1, cell_1.shots_fired
+
+    cell_1.fire_upon
+
+    assert_equal 2, cell_1.shots_fired
+  end
+
 end
