@@ -94,4 +94,9 @@ class MessageTest < Minitest::Test
     assert_equal expected, @message.hooman_shot_results(cell_1)
   end
 
+  def test_game_end_messages
+    assert_equal "You won!", @message.hooman_wins
+    assert_equal "I won!", @message.cpu_wins
+  end
+
 end

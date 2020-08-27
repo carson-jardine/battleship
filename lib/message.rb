@@ -50,4 +50,12 @@ class Message
       p "Your shot on #{cell.coordinate} was a #{shot_type}."
   end
 
+  def hooman_wins
+      p "You won!"
+  end
+
+  def cpu_wins
+      p "I won!"
+  end
+
 end
