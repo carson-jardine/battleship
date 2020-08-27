@@ -1,10 +1,11 @@
 class Board
+  attr_reader :cells
 
   def initialize
-    @cells = cells
+    @cells = build_cells
   end
 
-  def cells
+  def build_cells
     @cells = {
       "A1" => Cell.new("A1"),
       "A2" => Cell.new("A2"),
@@ -38,7 +39,7 @@ class Board
   end
 
   def consecutive_spaces?(coord_array)
-    split_letter = coord_array.map { |coord| coord.split('').shift } 
+    split_letter = coord_array.map { |coord| coord.split('').shift }
     split_num = coord_array.map { |coord| (coord.split('')[1]).to_i }
     if split_letter.all? { |letter| letter == split_letter[0] }
       if split_num.each_cons(2).all? { |x, y| x == y - 1 }
@@ -58,4 +59,14 @@ class Board
       end
     end
   end
+
+  def place(ship, coord_array)
+    if valid_placement?(ship, coord_array)
+      coord_array.each do |coord|
+        @cells[coord].place_ship(ship)
+      end
+    end
+  end
+
+
 end
