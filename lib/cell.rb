@@ -31,7 +31,7 @@ class Cell
       "X"
     elsif fired_upon? && !empty?
       "H"
-    elsif show_ship == true
+    elsif show_ship == true && !empty?
       "S"
     else
       '.'

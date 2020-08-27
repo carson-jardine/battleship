@@ -31,10 +31,11 @@ class Board
   end
 
   def valid_placement?(ship, coord_array)
+    #refactor to return false if
     if ship.length != coord_array.length
       false
     elsif invalid_coord_array_input(coord_array)
-      false 
+      false
     elsif coord_is_occupied(coord_array)
       false
     else
@@ -42,18 +43,25 @@ class Board
     end
   end
 
+  def split_letter(coord_array)
+    coord_array.map { |coord| coord.split('').shift }
+  end
+
+  def split_num(coord_array)
+    coord_array.map { |coord| (coord.split('')[1]).to_i }
+  end
+
   def consecutive_spaces?(coord_array)
-    split_letter = coord_array.map { |coord| coord.split('').shift }
-    split_num = coord_array.map { |coord| (coord.split('')[1]).to_i }
-    if split_letter.all? { |letter| letter == split_letter[0] }
-      if split_num.each_cons(2).all? { |x, y| x == y - 1 }
+    #refactor to shorten
+    if split_letter(coord_array).all? { |letter| letter == split_letter(coord_array)[0] }
+      if split_num(coord_array).each_cons(2).all? { |x, y| x == y - 1 }
         true
       else
         false
       end
     else
-      if split_letter.each_cons(2).all? { |x, y| x.ord == y.ord - 1 }
-        if split_num.all? { |num| num == split_num[0] }
+      if split_letter(coord_array).each_cons(2).all? { |x, y| x.ord == y.ord - 1 }
+        if split_num(coord_array).all? { |num| num == split_num(coord_array)[0] }
           true
         else
           false
@@ -74,9 +82,23 @@ class Board
 
   def place(ship, coord_array)
     if valid_placement?(ship, coord_array)
-      coord_array.each do |coord|
-        @cells[coord].place_ship(ship)
-      end
+      coord_array.each { |coord| @cells[coord].place_ship(ship)}
+    end
+  end
+
+  def render_helper
+     "  1 2 3 4 \nA #{@cells["A1"].render} #{@cells["A2"].render} #{@cells["A3"].render} #{@cells["A4"].render} \nB #{@cells["B1"].render} #{@cells["B2"].render} #{@cells["B3"].render} #{@cells["B4"].render} \nC #{@cells["C1"].render} #{@cells["C2"].render} #{@cells["C3"].render} #{@cells["C4"].render} \nD #{@cells["D1"].render} #{@cells["D2"].render} #{@cells["D3"].render} #{@cells["D4"].render} \n"
+  end
+
+  def render_true_helper
+       "  1 2 3 4 \nA #{@cells["A1"].render(true)} #{@cells["A2"].render(true)} #{@cells["A3"].render(true)} #{@cells["A4"].render(true)} \nB #{@cells["B1"].render(true)} #{@cells["B2"].render(true)} #{@cells["B3"].render(true)} #{@cells["B4"].render(true)} \nC #{@cells["C1"].render(true)} #{@cells["C2"].render(true)} #{@cells["C3"].render(true)} #{@cells["C4"].render(true)} \nD #{@cells["D1"].render(true)} #{@cells["D2"].render(true)} #{@cells["D3"].render(true)} #{@cells["D4"].render(true)} \n"
+  end
+
+  def render(show_ship = false)
+    unless show_ship == true
+      return render_helper
+    else
+      return render_true_helper
     end
   end
 
