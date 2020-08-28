@@ -6,4 +6,6 @@ class Player
     @submarine = Ship.new("Submarine", 2)
   end
 
+  
+
 end
