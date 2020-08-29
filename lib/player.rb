@@ -12,6 +12,10 @@ class Player
     @message = Message.new
   end
 
+  def ships_have_sunk?
+    @cruiser.sunk? && @submarine.sunk?
+  end
+
   def cpu_place_cruiser
     cpu_cruiser = @board.cells.keys.shuffle[0..2]
     if @board.valid_placement?(@cruiser, cpu_cruiser)
@@ -65,6 +69,30 @@ class Player
     else
       @message.invalid_coordinate_entry
       hooman_place_sub
+    end
+  end
+
+  def hooman_fires_shot
+    @message.hooman_shot_coordinate_entry
+    shot_input = gets.chomp.upcase
+    if @board.valid_coordinate?(shot_input)
+      cell_shot = @board.cells.fetch(shot_input)
+      cell_shot.fire_upon
+      @message.hooman_shot_results(cell_shot)
+    else
+      @message.hooman_invalid_shot_entry
+      hooman_fires_shot
+    end
+  end
+
+  def cpu_fires_zee_missle
+    cpu_shot = @board.cells.keys.shuffle[3]
+    if @board.valid_coordinate?(cpu_shot)
+      cell_shot = @board.cells.fetch(cpu_shot)
+      cell_shot.fire_upon
+      @message.cpu_shot_results(cell_shot)
+    else
+      cpu_fires_zee_missle
     end
   end
 

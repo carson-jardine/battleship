@@ -29,13 +29,25 @@ class Game
   def run_game
     @cpu.cpu_place_ships
     @hooman.hooman_place_ships
-    turn
+    while !@cpu.ships_have_sunk? && !@hooman.ships_have_sunk?
+      turn
+    end
+    if @cpu.ships_have_sunk
+      @message.hooman_wins
+      start
+    elsif @hooman.ships_have_sunk
+      @message.cpu_wins
+      start
+    else
+      puts "Oh no, what happened?"
+    end
   end
 
   def turn
     display_boards
-    #@hooman.hooman_turn
-    #@cpu.cpu_turn
+    @hooman.hooman_fires_shot
+    @cpu.cpu_fires_zee_missle
+    # Note: The shot results messages are not in the right order. Not together I mean.
   end
 
   def display_boards

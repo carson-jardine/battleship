@@ -48,6 +48,7 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_can_place_cruiser
+    skip
     @hooman.hooman_place_cruiser
     test_array = @hooman.board.cells.values.select do |cell|
       cell if !cell.empty?
@@ -64,6 +65,7 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_can_place_submarine
+    skip
     @hooman.hooman_place_sub
     test_array = @hooman.board.cells.values.select do |cell|
       cell if !cell.empty?
@@ -75,6 +77,48 @@ class PlayerTest < Minitest::Test
     assert_equal test_array[0].ship, @hooman.submarine
     assert_equal test_array[1].ship, @hooman.submarine
     refute_equal bad_array[1].ship, @hooman.submarine
+  end
+
+  def test_check_if_player_ships_have_sunk
+
+    assert_equal false, @cpu.ships_have_sunk?
+
+    @cpu.cruiser.hit
+    @cpu.cruiser.hit
+    @cpu.cruiser.hit
+    @cpu.submarine.hit
+    @cpu.submarine.hit
+
+    assert @cpu.ships_have_sunk?
+  end
+
+  def test_hooman_can_take_a_turn
+    @hooman.hooman_fires_shot
+
+    test_array = @hooman.board.cells.values.select do |cell|
+      cell if cell.fired_upon?
+    end
+    bad_array = @hooman.board.cells.values.select do |cell|
+      cell if !cell.fired_upon?
+    end
+
+    assert_equal 1, test_array[0].shots_fired
+    assert_equal false, bad_array[0].fired_upon?
+  end
+
+  def test_cpu_can_take_a_turn
+    @cpu.cpu_fires_zee_missle
+
+    test_array = @cpu.board.cells.values.select do |cell|
+      cell if cell.fired_upon?
+    end
+    bad_array = @cpu.board.cells.values.select do |cell|
+      cell if !cell.fired_upon?
+    end
+
+    assert_equal 1, test_array[0].shots_fired
+    assert_equal false, bad_array[4].fired_upon?
+
   end
 
 end
