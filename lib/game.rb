@@ -29,13 +29,17 @@ class Game
   def run_game
     @cpu.cpu_place_ships
     @hooman.hooman_place_ships
-    turn
+    while !@cpu.ships_have_sunk? && !@hooman.ships_have_sunk?
+      turn
+    end
+    #run loop until either player has 2 sunk ships
   end
 
   def turn
     display_boards
     #@hooman.hooman_turn
     #@cpu.cpu_turn
+    #results
   end
 
   def display_boards

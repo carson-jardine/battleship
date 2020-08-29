@@ -12,6 +12,10 @@ class Player
     @message = Message.new
   end
 
+  def ships_have_sunk?
+    @cruiser.sunk? && @submarine.sunk?
+  end
+
   def cpu_place_cruiser
     cpu_cruiser = @board.cells.keys.shuffle[0..2]
     if @board.valid_placement?(@cruiser, cpu_cruiser)
@@ -67,6 +71,8 @@ class Player
       hooman_place_sub
     end
   end
+
+  
 
 
 end

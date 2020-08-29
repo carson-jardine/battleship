@@ -77,4 +77,29 @@ class PlayerTest < Minitest::Test
     refute_equal bad_array[1].ship, @hooman.submarine
   end
 
+  def test_check_if_player_ships_have_sunk
+
+    assert_equal false, @cpu.ships_have_sunk?
+
+    @cpu.cruiser.hit
+    @cpu.cruiser.hit
+    @cpu.cruiser.hit
+    @cpu.submarine.hit
+    @cpu.submarine.hit
+
+    assert @cpu.ships_have_sunk?
+  end
+
+  def test_hooman_can_take_a_turn
+    skip
+    cell = "A1"
+    @hooman.fires_shot
+
+    assert_equal
+    # Ask for coordinate
+    # Validate the coordinate
+    # Fire on cell - wait on displaying message.
+    # Test when they fire on the same cell.
+  end
+
 end
