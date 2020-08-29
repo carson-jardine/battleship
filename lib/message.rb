@@ -66,6 +66,22 @@ class Message
       statement
   end
 
+  def cpu_shot_results(cell)
+    shot_type = nil
+    if cell.render == "M"
+      shot_type = "miss"
+    elsif cell.render == "X"
+      shot_type = "hit, the ship is sunk"
+    elsif cell.render == "H"
+      shot_type = "hit"
+    else
+      shot_type = "WTF PPL"
+    end
+      statement = "My shot on #{cell.coordinate} was a #{shot_type}."
+      puts statement
+      statement
+  end
+
   def hooman_wins
       statement = "You won!"
       puts statement

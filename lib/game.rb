@@ -32,14 +32,22 @@ class Game
     while !@cpu.ships_have_sunk? && !@hooman.ships_have_sunk?
       turn
     end
-    #run loop until either player has 2 sunk ships
+    if @cpu.ships_have_sunk
+      @message.hooman_wins
+      start
+    elsif @hooman.ships_have_sunk
+      @message.cpu_wins
+      start
+    else
+      puts "Oh no, what happened?"
+    end
   end
 
   def turn
     display_boards
     @hooman.hooman_fires_shot
     @cpu.cpu_fires_zee_missle
-    results
+    # Note: The shot results messages are not in the right order. Not together I mean.
   end
 
   def display_boards
@@ -49,10 +57,6 @@ class Game
     puts "\n"
     puts "==============HOOMAN BOARD=============="
     print @hooman.board.render(true)
-  end
-
-  def results
-
   end
 
 end

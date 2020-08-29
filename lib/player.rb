@@ -90,6 +90,7 @@ class Player
     if @board.valid_coordinate?(cpu_shot)
       cell_shot = @board.cells.fetch(cpu_shot)
       cell_shot.fire_upon
+      @message.cpu_shot_results(cell_shot)
     else
       cpu_fires_zee_missle
     end
