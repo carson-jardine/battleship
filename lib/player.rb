@@ -72,7 +72,17 @@ class Player
     end
   end
 
-  
-
+  def hooman_fires_shot
+    @message.hooman_shot_coordinate_entry
+    shot_input = gets.chomp.upcase
+    if @board.valid_coordinate?(shot_input)
+      cell_shot = @board.cells.fetch(shot_input)
+      cell_shot.fire_upon
+      @message.hooman_shot_results(cell_shot)
+    else
+      @message.hooman_invalid_shot_entry
+      hooman_fires_shot
+    end
+  end
 
 end

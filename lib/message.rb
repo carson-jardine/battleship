@@ -42,8 +42,8 @@ class Message
     statement
   end
 
-  def hooman_valid_shot_entry
-    statement = "Please enter a valid coordinate: \n> "
+  def hooman_invalid_shot_entry
+    statement = "Please enter a valid coordinate."
     puts statement
     statement
   end

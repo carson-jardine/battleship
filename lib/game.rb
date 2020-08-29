@@ -37,7 +37,7 @@ class Game
 
   def turn
     display_boards
-    #@hooman.hooman_turn
+    @hooman.hooman_fires_shot
     #@cpu.cpu_turn
     #results
   end

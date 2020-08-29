@@ -43,7 +43,7 @@ class MessageTest < Minitest::Test
   end
 
   def test_invalid_coordinate_user_input
-    expected = "Those are invalid coordinates. Please try again: \n> "
+    expected = "Those are invalid coordinates. Please try again."
 
     assert_equal expected, @message.invalid_coordinate_entry
   end
@@ -55,9 +55,9 @@ class MessageTest < Minitest::Test
   end
 
   def test_hooman_instructions_input_valid_shot_coordinates
-    expected = "Please enter a valid coordinate: \n> "
+    expected = "Please enter a valid coordinate."
 
-    assert_equal expected, @message.hooman_valid_shot_entry
+    assert_equal expected, @message.hooman_invalid_shot_entry
   end
 
   def test_message_to_hooman_shot

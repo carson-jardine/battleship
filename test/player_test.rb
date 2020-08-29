@@ -48,6 +48,7 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_can_place_cruiser
+    skip
     @hooman.hooman_place_cruiser
     test_array = @hooman.board.cells.values.select do |cell|
       cell if !cell.empty?
@@ -64,6 +65,7 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_can_place_submarine
+    skip
     @hooman.hooman_place_sub
     test_array = @hooman.board.cells.values.select do |cell|
       cell if !cell.empty?
@@ -91,15 +93,17 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_can_take_a_turn
-    skip
-    cell = "A1"
-    @hooman.fires_shot
+    @hooman.hooman_fires_shot
 
-    assert_equal
-    # Ask for coordinate
-    # Validate the coordinate
-    # Fire on cell - wait on displaying message.
-    # Test when they fire on the same cell.
+    test_array = @hooman.board.cells.values.select do |cell|
+      cell if cell.fired_upon?
+    end
+    bad_array = @hooman.board.cells.values.select do |cell|
+      cell if !cell.fired_upon?
+    end
+
+    assert_equal 1, test_array[0].shots_fired
+    assert_equal false, bad_array[0].fired_upon?
   end
 
 end
