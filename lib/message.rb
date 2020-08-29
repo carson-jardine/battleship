@@ -5,7 +5,7 @@ class Message
   end
 
   def main_menu
-    p "Welcome to BATTLESHIP \nEnter p to play. Enter q to quit. \n> "
+    "Welcome to BATTLESHIP \nEnter p to play. Enter q to quit. \n> "
   end
 
   def hooman_instructions

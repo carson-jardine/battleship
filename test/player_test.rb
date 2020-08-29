@@ -19,4 +19,19 @@ class PlayerTest < Minitest::Test
     assert_instance_of Player, @cpu
   end
 
+  def test_cpu_can_place_cruiser
+    @cpu.cpu_place_cruiser
+    test_array = @cpu.board.cells.values.select do |cell|
+      cell if !cell.empty?
+    end
+    bad_array = @cpu.board.cells.values.select do |cell|
+      cell if cell.empty?
+    end
+    assert_equal test_array[0].ship, @cpu.cruiser
+    assert_equal test_array[1].ship, @cpu.cruiser
+    assert_equal test_array[2].ship, @cpu.cruiser
+    refute_equal bad_array[1].ship, @cpu.cruiser
+
+  end
+
 end
