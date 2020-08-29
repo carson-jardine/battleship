@@ -19,8 +19,5 @@ class GameTest < Minitest::Test
     assert_instance_of Game, @game
   end
 
-  def test_cpu_can_place_ships
-    @game.cpu_place_ship(cpu_cruiser)
-  end
 
 end

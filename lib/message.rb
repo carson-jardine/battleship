@@ -5,33 +5,47 @@ class Message
   end
 
   def main_menu
-    p "Welcome to BATTLESHIP \nEnter p to play. Enter q to quit."
+    statement = "Welcome to BATTLESHIP \nEnter p to play. Enter q to quit. \n> "
+    puts statement
+    statement
   end
 
   def hooman_instructions
-    p "I have laid out my ships on the grid. \n
+    statement = "I have laid out my ships on the grid. \n
     You now need to lay out your two ships. \n
     The Cruiser is three units long and the Submarine is two units long."
+    puts statement
+    statement
   end
 
   def hooman_cruiser_instructions
-    p "Enter the squares for the Cruiser (3 spaces): \n> "
+    statement = "Enter the squares for the Cruiser (3 spaces): \n> "
+    puts statement
+    statement
   end
 
   def hooman_sub_instructions
-    p "Enter the squares for the Submarine (2 spaces): \n> "
+    statement = "Enter the squares for the Submarine (2 spaces): \n> "
+    puts statement
+    statement
   end
 
   def invalid_coordinate_entry
-    p "Those are invalid coordinates. Please try again: \n> "
+    statement = "Those are invalid coordinates. Please try again."
+    puts statement
+    statement
   end
 
   def hooman_shot_coordinate_entry
-    p "Enter the coordinate for your shot: \n> "
+    statement = "Enter the coordinate for your shot: \n> "
+    puts statement
+    statement
   end
 
   def hooman_valid_shot_entry
-    p "Please enter a valid coordinate: \n> "
+    statement = "Please enter a valid coordinate: \n> "
+    puts statement
+    statement
   end
 
   def hooman_shot_results(cell)
@@ -47,15 +61,21 @@ class Message
     else
       shot_type = "WTF PPL"
     end
-      p "Your shot on #{cell.coordinate} was a #{shot_type}."
+      statement = "Your shot on #{cell.coordinate} was a #{shot_type}."
+      puts statement
+      statement
   end
 
   def hooman_wins
-      p "You won!"
+      statement = "You won!"
+      puts statement
+      statement
   end
 
   def cpu_wins
-      p "I won!"
+      statement = "I won!"
+      puts statement
+      statement
   end
 
 end
