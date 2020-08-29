@@ -107,7 +107,9 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_can_take_a_turn
+    skip
     @cpu.hooman_fires_shot
+
 
     test_array = @cpu.board.cells.values.select do |cell|
       cell if cell.fired_upon?
@@ -118,12 +120,25 @@ class PlayerTest < Minitest::Test
 
     assert_equal 1, test_array[0].shots_fired
     assert_equal false, bad_array[4].fired_upon?
-
   end
 
-  def test_hooman_inputs_invalid_shot
+  def test_hooman_duplicated_shot
+    cell_tested = @cpu.board.cells.fetch("B2")
+    cell_tested.fire_upon
+    puts "\nEnter B2 as your shot."
+    @cpu.hooman_fires_shot
 
-    assert_equal
+    test_array = @cpu.board.cells.values.select do |cell|
+      cell if cell.fired_upon?
+    end
+    bad_array = @cpu.board.cells.values.select do |cell|
+      cell if !cell.fired_upon?
+    end
+
+    assert_equal 2, cell_tested.shots_fired
+    assert_equal 1, test_array[0].shots_fired
+    assert_equal false, bad_array[4].fired_upon?
+
   end
 
 end
