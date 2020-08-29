@@ -30,7 +30,7 @@ class Message
 
   def invalid_coordinate_entry
     statement = "Those are invalid coordinates. Please try again."
-    print statement
+    puts statement
     statement
   end
 
@@ -42,7 +42,7 @@ class Message
 
   def hooman_invalid_shot_entry
     statement = "Please enter a valid coordinate."
-    print statement
+    puts statement
     statement
   end
 

@@ -32,10 +32,10 @@ class Game
     while !@cpu.ships_have_sunk? && !@hooman.ships_have_sunk?
       turn
     end
-    if @cpu.ships_have_sunk
+    if @cpu.ships_have_sunk?
       @message.hooman_wins
       start
-    elsif @hooman.ships_have_sunk
+    elsif @hooman.ships_have_sunk?
       @message.cpu_wins
       start
     else
