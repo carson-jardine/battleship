@@ -5,9 +5,11 @@ require './lib/player'
 require './lib/message'
 
 class Game
-  attr_reader :message
+  attr_reader :message, :hooman, :cpu
 
   def initialize
+    @hooman = Player.new
+    @cpu = Player.new
     @message = Message.new
   end
 
@@ -16,7 +18,7 @@ class Game
     user_input = gets.chomp.downcase
 
     if user_input == "p"
-      #cpu.place_ships
+      @cpu.cpu_place_ships
       #hooman.place_ships
     elsif user_input == "q"
       exit

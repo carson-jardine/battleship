@@ -46,4 +46,5 @@ class PlayerTest < Minitest::Test
     refute_equal bad_array[1].ship, @cpu.submarine
   end
 
+
 end
