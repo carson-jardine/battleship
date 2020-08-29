@@ -99,8 +99,6 @@ class Player
     else
       cpu_fires_zee_missle
     end
-
-    #cpu can possibly shoot on the same spot
   end
 
 

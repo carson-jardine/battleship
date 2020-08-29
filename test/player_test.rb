@@ -1,10 +1,7 @@
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/board'
-require './lib/ship'
 require './lib/cell'
-require './lib/message'
-require './lib/game'
 require './lib/player'
 
 class PlayerTest < Minitest::Test
@@ -48,7 +45,6 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_can_place_cruiser
-    skip
     @hooman.hooman_place_cruiser
     test_array = @hooman.board.cells.values.select do |cell|
       cell if !cell.empty?
@@ -65,7 +61,6 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_can_place_submarine
-    skip
     @hooman.hooman_place_sub
     test_array = @hooman.board.cells.values.select do |cell|
       cell if !cell.empty?
@@ -107,7 +102,6 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_can_take_a_turn
-    skip
     @cpu.hooman_fires_shot
 
 
