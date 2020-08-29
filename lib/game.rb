@@ -29,12 +29,20 @@ class Game
   def run_game
     @cpu.cpu_place_ships
     @hooman.hooman_place_ships
+    turn
+  end
+
+  def turn
     display_boards
+    #@hooman.hooman_turn
+    #@cpu.cpu_turn
   end
 
   def display_boards
+    puts "\n \n"
     puts "=============COMPUTER BOARD============="
     print @cpu.board.render
+    puts "\n"
     puts "==============HOOMAN BOARD=============="
     print @hooman.board.render(true)
   end
