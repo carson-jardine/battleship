@@ -45,8 +45,11 @@ class Game
 
   def turn
     display_boards
-    @hooman.hooman_fires_shot
-    @cpu.cpu_fires_zee_missle
+    @hooman.cpu_fires_zee_missle
+    @cpu.hooman_fires_shot
+
+    # @hooman.hooman_fires_shot
+    # @cpu.cpu_fires_zee_missle
     # Note: The shot results messages are not in the right order. Not together I mean.
   end
 

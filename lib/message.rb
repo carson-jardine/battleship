@@ -11,7 +11,7 @@ class Message
   end
 
   def hooman_instructions
-    statement = "I have laid out my ships on the grid. \nYou now need to lay out your two ships. \nThe Cruiser is three units long and the Submarine is two units long."
+    statement = "I have laid out my ships on the grid. \nYou now need to lay out your two ships. \nThe Cruiser is three units long and the Submarine is two units long.\n"
     print statement
     statement
   end
@@ -82,13 +82,13 @@ class Message
 
   def hooman_wins
       statement = "You won!"
-      print statement
+      puts statement
       statement
   end
 
   def cpu_wins
       statement = "I won!"
-      print statement
+      puts statement
       statement
   end
 
