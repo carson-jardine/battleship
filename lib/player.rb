@@ -20,4 +20,14 @@ class Player
     end
   end
 
+  def cpu_place_sub
+    cpu_sub = @board.cells.keys.shuffle[0..1]
+    if @board.valid_placement?(@submarine, cpu_sub)
+      @board.place(@submarine, cpu_sub)
+    else
+      cpu_place_sub
+    end
+
+  end
+
 end
