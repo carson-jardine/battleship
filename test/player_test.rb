@@ -106,4 +106,19 @@ class PlayerTest < Minitest::Test
     assert_equal false, bad_array[0].fired_upon?
   end
 
+  def test_cpu_can_take_a_turn
+    @cpu.cpu_fires_zee_missle
+
+    test_array = @cpu.board.cells.values.select do |cell|
+      cell if cell.fired_upon?
+    end
+    bad_array = @cpu.board.cells.values.select do |cell|
+      cell if !cell.fired_upon?
+    end
+
+    assert_equal 1, test_array[0].shots_fired
+    assert_equal false, bad_array[4].fired_upon?
+
+  end
+
 end

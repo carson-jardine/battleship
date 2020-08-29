@@ -85,4 +85,15 @@ class Player
     end
   end
 
+  def cpu_fires_zee_missle
+    cpu_shot = @board.cells.keys.shuffle[3]
+    if @board.valid_coordinate?(cpu_shot)
+      cell_shot = @board.cells.fetch(cpu_shot)
+      cell_shot.fire_upon
+    else
+      cpu_fires_zee_missle
+    end
+  end
+
+
 end

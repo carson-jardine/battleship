@@ -38,8 +38,8 @@ class Game
   def turn
     display_boards
     @hooman.hooman_fires_shot
-    #@cpu.cpu_turn
-    #results
+    @cpu.cpu_fires_zee_missle
+    results
   end
 
   def display_boards
@@ -49,6 +49,10 @@ class Game
     puts "\n"
     puts "==============HOOMAN BOARD=============="
     print @hooman.board.render(true)
+  end
+
+  def results
+
   end
 
 end
