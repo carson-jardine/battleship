@@ -45,8 +45,7 @@ class Player
   def hooman_place_cruiser
     @message.hooman_cruiser_instructions
 
-    cruiser_input = $stdin.gets.chomp.upcase.split(" ")
-    # Need way to exit for testing
+    cruiser_input = gets.chomp.upcase.split(" ")
     if @board.valid_placement?(@cruiser, cruiser_input)
       @board.place(@cruiser, cruiser_input)
       puts @board.render(true)

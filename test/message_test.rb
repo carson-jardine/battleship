@@ -17,7 +17,7 @@ class MessageTest < Minitest::Test
   end
 
   def test_intro_for_game_display
-    expected = "Welcome to BATTLESHIP \nEnter p to play. Enter q to quit."
+    expected = "Welcome to BATTLESHIP \nEnter p to play. Enter q to quit. \n> "
 
     assert_equal expected, @message.main_menu
   end
