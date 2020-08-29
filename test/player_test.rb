@@ -41,10 +41,40 @@ class PlayerTest < Minitest::Test
     bad_array = @cpu.board.cells.values.select do |cell|
       cell if cell.empty?
     end
+
     assert_equal test_array[0].ship, @cpu.submarine
     assert_equal test_array[1].ship, @cpu.submarine
     refute_equal bad_array[1].ship, @cpu.submarine
   end
 
+  def test_hooman_can_place_cruiser
+    @hooman.hooman_place_cruiser
+    test_array = @hooman.board.cells.values.select do |cell|
+      cell if !cell.empty?
+    end
+    bad_array = @hooman.board.cells.values.select do |cell|
+      cell if cell.empty?
+    end
+
+    assert_equal test_array[0].ship, @hooman.cruiser
+    assert_equal test_array[1].ship, @hooman.cruiser
+    assert_equal test_array[2].ship, @hooman.cruiser
+    refute_equal bad_array[1].ship, @hooman.cruiser
+
+  end
+
+  def test_hooman_can_place_submarine
+    @hooman.hooman_place_sub
+    test_array = @hooman.board.cells.values.select do |cell|
+      cell if !cell.empty?
+    end
+    bad_array = @hooman.board.cells.values.select do |cell|
+      cell if cell.empty?
+    end
+
+    assert_equal test_array[0].ship, @hooman.submarine
+    assert_equal test_array[1].ship, @hooman.submarine
+    refute_equal bad_array[1].ship, @hooman.submarine
+  end
 
 end
