@@ -92,7 +92,6 @@ class Player
   def cpu_fires_zee_missle
     cpu_shot = @board.cells.keys.shuffle[3]
     cell_shot = @board.cells.fetch(cpu_shot) if @board.valid_coordinate?(cpu_shot)
-    # moved the valid coordinate up here, if it isn't a valid coordinate, it should move to the else below
     if cell_shot.shots_fired == 0
       cell_shot.fire_upon
       @message.cpu_shot_results(cell_shot)
