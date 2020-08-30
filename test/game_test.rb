@@ -1,10 +1,9 @@
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/board'
-require './lib/ship'
 require './lib/cell'
-require './lib/message'
 require './lib/game'
+require './lib/player'
 
 class GameTest < Minitest::Test
 
