@@ -16,34 +16,49 @@ class PlayerTest < Minitest::Test
   end
 
   def test_cpu_can_place_cruiser
-    @cpu.cpu_place_cruiser
+    # require "pry"; binding.pry
+    @cpu.cpu_place_ships
     test_array = @cpu.board.cells.values.select do |cell|
       cell if !cell.empty?
     end
     bad_array = @cpu.board.cells.values.select do |cell|
       cell if cell.empty?
     end
-    assert_equal test_array[0].ship, @cpu.cruiser
-    assert_equal test_array[1].ship, @cpu.cruiser
-    assert_equal test_array[2].ship, @cpu.cruiser
-    refute_equal bad_array[1].ship, @cpu.cruiser
-  end
+    assert_equal 5, test_array.length
+    # refute_empty test_array[0].ship
 
-  def test_cpu_can_place_submarine
-    @cpu.cpu_place_sub
-    test_array = @cpu.board.cells.values.select do |cell|
-      cell if !cell.empty?
-    end
-    bad_array = @cpu.board.cells.values.select do |cell|
-      cell if cell.empty?
-    end
-
-    assert_equal test_array[0].ship, @cpu.submarine
-    assert_equal test_array[1].ship, @cpu.submarine
-    refute_equal bad_array[1].ship, @cpu.submarine
   end
+  #
+  # def test_cpu_can_place_cruiser
+  #   @cpu.cpu_place_ships
+  #   test_array = @cpu.board.cells.values.select do |cell|
+  #     cell if !cell.empty?
+  #   end
+  #   bad_array = @cpu.board.cells.values.select do |cell|
+  #     cell if cell.empty?
+  #   end
+  #   assert_equal test_array[0].ship, @cpu.cruiser
+  #   assert_equal test_array[1].ship, @cpu.cruiser
+  #   assert_equal test_array[2].ship, @cpu.cruiser
+  #   refute_equal bad_array[1].ship, @cpu.cruiser
+  # end
+  #
+  # def test_cpu_can_place_submarine
+  #   @cpu.cpu_place_ships
+  #   test_array = @cpu.board.cells.values.select do |cell|
+  #     cell if !cell.empty?
+  #   end
+  #   bad_array = @cpu.board.cells.values.select do |cell|
+  #     cell if cell.empty?
+  #   end
+
+  #   assert_equal test_array[0].ship, @cpu.submarine
+  #   assert_equal test_array[1].ship, @cpu.submarine
+  #   refute_equal bad_array[1].ship, @cpu.submarine
+  # end
 
   def test_hooman_can_place_cruiser
+    skip
     @hooman.hooman_place_cruiser
     test_array = @hooman.board.cells.values.select do |cell|
       cell if !cell.empty?
@@ -60,6 +75,8 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_can_place_submarine
+    skip
+
     @hooman.hooman_place_sub
     test_array = @hooman.board.cells.values.select do |cell|
       cell if !cell.empty?
@@ -74,6 +91,7 @@ class PlayerTest < Minitest::Test
   end
 
   def test_check_if_player_ships_have_sunk
+    skip
 
     assert_equal false, @cpu.ships_have_sunk?
 
@@ -87,6 +105,8 @@ class PlayerTest < Minitest::Test
   end
 
   def test_cpu_can_take_a_turn
+    skip
+
     @hooman.cpu_fires_zee_missle
 
     test_array = @hooman.board.cells.values.select do |cell|
@@ -101,6 +121,8 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_can_take_a_turn
+    skip
+
     @cpu.hooman_fires_shot
 
 
@@ -116,6 +138,8 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_duplicated_shot
+    skip
+
     cell_tested = @cpu.board.cells.fetch("B2")
     cell_tested.fire_upon
     puts "\nEnter B2 as your shot."

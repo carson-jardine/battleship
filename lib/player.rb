@@ -8,34 +8,60 @@ class Player
     @board = Board.new
     @cruiser = Ship.new("Cruiser", 3)
     @submarine = Ship.new("Submarine", 2)
+    @ships = [@cruiser, @submarine]
+  end
+
+  def cell_placement(ship)
+    initial_cell = @board.cells.keys.shuffle[0]
+    initial_letter = initial_cell.split('').shift
+    initial_number = initial_cell.split('')[1].to_i
+    num_range = (initial_number..initial_number + (ship.length - 1)).to_a
+    cons_num_place = num_range.map { |num| initial_letter + num.to_s }
+    letter_range = (initial_letter.ord..(initial_letter.ord + (ship.length - 1))).to_a.map do |ord_value|
+      ord_value.chr
+    end
+    cons_letter_place = letter_range.map { |letter| letter + initial_number.to_s }
+    if @board.valid_placement?(ship, cons_num_place)
+      @board.place(ship, cons_num_place)
+    elsif @board.valid_placement?(ship, cons_letter_place)
+      @board.place(ship, cons_letter_place)
+    else
+      cell_placement(ship)
+    end
+  end
+
+  def cpu_place_ships
+    @ships.each do |ship|
+      cell_placement(ship)
+    end
   end
 
   def ships_have_sunk?
     @cruiser.sunk? && @submarine.sunk?
   end
 
-  def cpu_place_cruiser
-    cpu_cruiser = @board.cells.keys.shuffle[0..2]
-    if @board.valid_placement?(@cruiser, cpu_cruiser)
-      @board.place(@cruiser, cpu_cruiser)
-    else
-      cpu_place_cruiser
-    end
-  end
+  # def cpu_place_cruiser
+  #   cpu_cruiser = @board.cells.keys.shuffle[0..2]
+  #   if @board.valid_placement?(@cruiser, cpu_cruiser)
+  #     @board.place(@cruiser, cpu_cruiser)
+  #   else
+  #     cpu_place_cruiser
+  #   end
+  # end
+  #
+  # def cpu_place_sub
+  #   cpu_sub = @board.cells.keys.shuffle[0..1]
+  #   if @board.valid_placement?(@submarine, cpu_sub)
+  #     @board.place(@submarine, cpu_sub)
+  #   else
+  #     cpu_place_sub
+  #   end
+  # end
 
-  def cpu_place_sub
-    cpu_sub = @board.cells.keys.shuffle[0..1]
-    if @board.valid_placement?(@submarine, cpu_sub)
-      @board.place(@submarine, cpu_sub)
-    else
-      cpu_place_sub
-    end
-  end
-
-  def cpu_place_ships
-    cpu_place_cruiser
-    cpu_place_sub
-  end
+  # def cpu_place_ships
+  #   cpu_place_cruiser
+  #   cpu_place_sub
+  # end
 
   def hooman_place_ships
     puts "I have laid out my ships on the grid. \nYou now need to lay out your two ships. \nThe Cruiser is three units long and the Submarine is two units long.\n"
