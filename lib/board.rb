@@ -1,8 +1,12 @@
+require './lib/cell'
+
 class Board
   attr_reader :cells
 
   def initialize
     @cells = build_cells
+    @num_count = 4
+    @letter_count = 4
   end
 
   def build_cells
@@ -31,16 +35,10 @@ class Board
   end
 
   def valid_placement?(ship, coord_array)
-    #refactor to return false if
-    if ship.length != coord_array.length
-      false
-    elsif invalid_coord_array_input(coord_array)
-      false
-    elsif coord_is_occupied(coord_array)
-      false
-    else
-      consecutive_spaces?(coord_array)
-    end
+    return false if ship.length != coord_array.length
+    return false if invalid_coord_array_input(coord_array)
+    return false if coord_is_occupied(coord_array)
+    consecutive_spaces?(coord_array)
   end
 
   def split_letter(coord_array)
@@ -51,25 +49,22 @@ class Board
     coord_array.map { |coord| (coord.split('')[1]).to_i }
   end
 
+  def same_letter_cons_num?(coord_array)
+    first_letter = split_letter(coord_array)[0]
+    same_letter = split_letter(coord_array).all? { |letter| letter == first_letter }
+    cons_num = split_num(coord_array).each_cons(2).all? { |x, y| x == y - 1 }
+    same_letter && cons_num
+  end
+
+  def same_num_cons_letter?(coord_array)
+    first_num = split_num(coord_array)[0]
+    same_num = split_num(coord_array).all? { |num| num == first_num }
+    cons_letter = split_letter(coord_array).each_cons(2).all? { |x, y| x.ord == y.ord - 1 }
+    same_num && cons_letter
+  end
+
   def consecutive_spaces?(coord_array)
-    #refactor to shorten
-    if split_letter(coord_array).all? { |letter| letter == split_letter(coord_array)[0] }
-      if split_num(coord_array).each_cons(2).all? { |x, y| x == y - 1 }
-        true
-      else
-        false
-      end
-    else
-      if split_letter(coord_array).each_cons(2).all? { |x, y| x.ord == y.ord - 1 }
-        if split_num(coord_array).all? { |num| num == split_num(coord_array)[0] }
-          true
-        else
-          false
-        end
-      else
-        false
-      end
-    end
+    same_letter_cons_num?(coord_array) || same_num_cons_letter?(coord_array)
   end
 
   def invalid_coord_array_input(coord_array)
@@ -86,21 +81,36 @@ class Board
     end
   end
 
-  def render_helper
-     "  1 2 3 4 \nA #{@cells["A1"].render} #{@cells["A2"].render} #{@cells["A3"].render} #{@cells["A4"].render} \nB #{@cells["B1"].render} #{@cells["B2"].render} #{@cells["B3"].render} #{@cells["B4"].render} \nC #{@cells["C1"].render} #{@cells["C2"].render} #{@cells["C3"].render} #{@cells["C4"].render} \nD #{@cells["D1"].render} #{@cells["D2"].render} #{@cells["D3"].render} #{@cells["D4"].render} \n"
-  end
-
-  def render_true_helper
-       "  1 2 3 4 \nA #{@cells["A1"].render(true)} #{@cells["A2"].render(true)} #{@cells["A3"].render(true)} #{@cells["A4"].render(true)} \nB #{@cells["B1"].render(true)} #{@cells["B2"].render(true)} #{@cells["B3"].render(true)} #{@cells["B4"].render(true)} \nC #{@cells["C1"].render(true)} #{@cells["C2"].render(true)} #{@cells["C3"].render(true)} #{@cells["C4"].render(true)} \nD #{@cells["D1"].render(true)} #{@cells["D2"].render(true)} #{@cells["D3"].render(true)} #{@cells["D4"].render(true)} \n"
-  end
-
   def render(show_ship = false)
     unless show_ship == true
-      return render_helper
+      return row_1_render + rest_of_rows.join + "\n"
     else
-      return render_true_helper
+      return row_1_render + rest_of_rows_show_ship_true.join + "\n"
     end
   end
 
+  def row_1_render
+    "  " + (1..@num_count).to_a.map { |num| num.to_s.concat(" ") }.join
+  end
+
+  def board_groups
+    (1..@letter_count).to_a.map do |i|
+      @cells.keys[((@num_count*i)-@num_count)..((@num_count*i)-1)]
+    end
+  end
+
+  def rest_of_rows
+    board_groups.map do |group|
+      "\n" + split_letter(group)[0] + " " +
+      @cells.values_at(*group).map { |cell_object| cell_object.render + " " }.join
+    end
+  end
+
+  def rest_of_rows_show_ship_true
+    board_groups.map do |group|
+      "\n" + split_letter(group)[0] + " " +
+      @cells.values_at(*group).map { |cell_object| cell_object.render(true) + " " }.join
+    end
+  end
 
 end

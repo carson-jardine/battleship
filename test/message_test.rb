@@ -1,10 +1,8 @@
 require 'minitest/autorun'
 require 'minitest/pride'
-require './lib/board'
 require './lib/ship'
 require './lib/cell'
 require './lib/message'
-require './lib/game'
 
 class MessageTest < Minitest::Test
 
@@ -23,9 +21,7 @@ class MessageTest < Minitest::Test
   end
 
   def test_hooman_instructions
-    expected = "I have laid out my ships on the grid. \n
-    You now need to lay out your two ships. \n
-    The Cruiser is three units long and the Submarine is two units long."
+    expected = "I have laid out my ships on the grid. \nYou now need to lay out your two ships. \nThe Cruiser is three units long and the Submarine is two units long.\n"
 
     assert_equal expected, @message.hooman_instructions
   end

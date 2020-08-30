@@ -1,10 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/pride'
-require './lib/board'
-require './lib/ship'
 require './lib/cell'
-require './lib/message'
-require './lib/game'
 require './lib/player'
 
 class PlayerTest < Minitest::Test
@@ -48,7 +44,6 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_can_place_cruiser
-    skip
     @hooman.hooman_place_cruiser
     test_array = @hooman.board.cells.values.select do |cell|
       cell if !cell.empty?
@@ -65,7 +60,6 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_can_place_submarine
-    skip
     @hooman.hooman_place_sub
     test_array = @hooman.board.cells.values.select do |cell|
       cell if !cell.empty?
@@ -92,8 +86,8 @@ class PlayerTest < Minitest::Test
     assert @cpu.ships_have_sunk?
   end
 
-  def test_hooman_can_take_a_turn
-    @hooman.hooman_fires_shot
+  def test_cpu_can_take_a_turn
+    @hooman.cpu_fires_zee_missle
 
     test_array = @hooman.board.cells.values.select do |cell|
       cell if cell.fired_upon?
@@ -106,8 +100,9 @@ class PlayerTest < Minitest::Test
     assert_equal false, bad_array[0].fired_upon?
   end
 
-  def test_cpu_can_take_a_turn
-    @cpu.cpu_fires_zee_missle
+  def test_hooman_can_take_a_turn
+    @cpu.hooman_fires_shot
+
 
     test_array = @cpu.board.cells.values.select do |cell|
       cell if cell.fired_upon?
@@ -116,6 +111,24 @@ class PlayerTest < Minitest::Test
       cell if !cell.fired_upon?
     end
 
+    assert_equal 1, test_array[0].shots_fired
+    assert_equal false, bad_array[4].fired_upon?
+  end
+
+  def test_hooman_duplicated_shot
+    cell_tested = @cpu.board.cells.fetch("B2")
+    cell_tested.fire_upon
+    puts "\nEnter B2 as your shot."
+    @cpu.hooman_fires_shot
+
+    test_array = @cpu.board.cells.values.select do |cell|
+      cell if cell.fired_upon?
+    end
+    bad_array = @cpu.board.cells.values.select do |cell|
+      cell if !cell.fired_upon?
+    end
+
+    assert_equal 2, cell_tested.shots_fired
     assert_equal 1, test_array[0].shots_fired
     assert_equal false, bad_array[4].fired_upon?
 

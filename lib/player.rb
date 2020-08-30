@@ -75,20 +75,24 @@ class Player
   def hooman_fires_shot
     @message.hooman_shot_coordinate_entry
     shot_input = gets.chomp.upcase
-    if @board.valid_coordinate?(shot_input)
-      cell_shot = @board.cells.fetch(shot_input)
+    cell_shot = @board.cells.fetch(shot_input) if @board.valid_coordinate?(shot_input)
+    if cell_shot == nil
+      @message.hooman_invalid_shot_entry
+      hooman_fires_shot
+    elsif cell_shot.shots_fired == 0
       cell_shot.fire_upon
       @message.hooman_shot_results(cell_shot)
-    else
-      @message.hooman_invalid_shot_entry
+    elsif cell_shot.shots_fired > 0
+      cell_shot.fire_upon
+      @message.hooman_shot_results(cell_shot)
       hooman_fires_shot
     end
   end
 
   def cpu_fires_zee_missle
     cpu_shot = @board.cells.keys.shuffle[3]
-    if @board.valid_coordinate?(cpu_shot)
-      cell_shot = @board.cells.fetch(cpu_shot)
+    cell_shot = @board.cells.fetch(cpu_shot) if @board.valid_coordinate?(cpu_shot)
+    if cell_shot.shots_fired == 0
       cell_shot.fire_upon
       @message.cpu_shot_results(cell_shot)
     else

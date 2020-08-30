@@ -1,6 +1,3 @@
-require './lib/board'
-require './lib/ship'
-require './lib/cell'
 require './lib/player'
 require './lib/message'
 
@@ -32,11 +29,13 @@ class Game
     while !@cpu.ships_have_sunk? && !@hooman.ships_have_sunk?
       turn
     end
-    if @cpu.ships_have_sunk
+    if @cpu.ships_have_sunk?
       @message.hooman_wins
+      initialize
       start
-    elsif @hooman.ships_have_sunk
+    elsif @hooman.ships_have_sunk?
       @message.cpu_wins
+      initialize
       start
     else
       puts "Oh no, what happened?"
@@ -45,9 +44,8 @@ class Game
 
   def turn
     display_boards
-    @hooman.hooman_fires_shot
-    @cpu.cpu_fires_zee_missle
-    # Note: The shot results messages are not in the right order. Not together I mean.
+    @cpu.hooman_fires_shot
+    @hooman.cpu_fires_zee_missle
   end
 
   def display_boards
