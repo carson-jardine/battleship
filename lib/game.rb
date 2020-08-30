@@ -31,9 +31,11 @@ class Game
     end
     if @cpu.ships_have_sunk?
       @message.hooman_wins
+      initialize
       start
     elsif @hooman.ships_have_sunk?
       @message.cpu_wins
+      initialize
       start
     else
       puts "Oh no, what happened?"
