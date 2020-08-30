@@ -31,16 +31,10 @@ class Board
   end
 
   def valid_placement?(ship, coord_array)
-    #refactor to return false if
-    if ship.length != coord_array.length
-      false
-    elsif invalid_coord_array_input(coord_array)
-      false
-    elsif coord_is_occupied(coord_array)
-      false
-    else
-      consecutive_spaces?(coord_array)
-    end
+    return false if ship.length != coord_array.length
+    return false if invalid_coord_array_input(coord_array)
+    return false if coord_is_occupied(coord_array)
+    consecutive_spaces?(coord_array)
   end
 
   def split_letter(coord_array)
@@ -51,25 +45,22 @@ class Board
     coord_array.map { |coord| (coord.split('')[1]).to_i }
   end
 
+  def same_letter_cons_num?(coord_array)
+    first_letter = split_letter(coord_array)[0]
+    same_letter = split_letter(coord_array).all? { |letter| letter == first_letter }
+    cons_num = split_num(coord_array).each_cons(2).all? { |x, y| x == y - 1 }
+    same_letter && cons_num
+  end
+
+  def same_num_cons_letter?(coord_array)
+    first_num = split_num(coord_array)[0]
+    same_num = split_num(coord_array).all? { |num| num == first_num }
+    cons_letter = split_letter(coord_array).each_cons(2).all? { |x, y| x.ord == y.ord - 1 }
+    same_num && cons_letter
+  end
+
   def consecutive_spaces?(coord_array)
-    #refactor to shorten
-    if split_letter(coord_array).all? { |letter| letter == split_letter(coord_array)[0] }
-      if split_num(coord_array).each_cons(2).all? { |x, y| x == y - 1 }
-        true
-      else
-        false
-      end
-    else
-      if split_letter(coord_array).each_cons(2).all? { |x, y| x.ord == y.ord - 1 }
-        if split_num(coord_array).all? { |num| num == split_num(coord_array)[0] }
-          true
-        else
-          false
-        end
-      else
-        false
-      end
-    end
+    same_letter_cons_num?(coord_array) || same_num_cons_letter?(coord_array)
   end
 
   def invalid_coord_array_input(coord_array)
