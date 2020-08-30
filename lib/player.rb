@@ -1,15 +1,13 @@
 require './lib/ship'
 require './lib/board'
-require './lib/message'
 
 class Player
-  attr_reader :board, :cruiser, :submarine, :message
+  attr_reader :board, :cruiser, :submarine
 
   def initialize
     @board = Board.new
     @cruiser = Ship.new("Cruiser", 3)
     @submarine = Ship.new("Submarine", 2)
-    @message = Message.new
   end
 
   def ships_have_sunk?
@@ -40,51 +38,83 @@ class Player
   end
 
   def hooman_place_ships
-    @message.hooman_instructions
+    puts "I have laid out my ships on the grid. \nYou now need to lay out your two ships. \nThe Cruiser is three units long and the Submarine is two units long.\n"
     puts @board.render
     hooman_place_cruiser
     hooman_place_sub
   end
 
   def hooman_place_cruiser
-    @message.hooman_cruiser_instructions
-
+    print "Enter the squares for the Cruiser (3 spaces): \n> "
     cruiser_input = gets.chomp.upcase.split(" ")
     if @board.valid_placement?(@cruiser, cruiser_input)
       @board.place(@cruiser, cruiser_input)
       puts @board.render(true)
     else
-      @message.invalid_coordinate_entry
+      puts "Those are invalid coordinates. Please try again."
       hooman_place_cruiser
     end
   end
 
   def hooman_place_sub
-    @message.hooman_sub_instructions
-
+    print "Enter the squares for the Submarine (2 spaces): \n> "
     sub_input = gets.chomp.upcase.split(" ")
     if @board.valid_placement?(@submarine, sub_input)
       @board.place(@submarine, sub_input)
       puts @board.render(true)
     else
-      @message.invalid_coordinate_entry
+      puts "Those are invalid coordinates. Please try again."
       hooman_place_sub
     end
   end
 
+  def hooman_shot_results(cell)
+    shot_type = nil
+    if cell.shots_fired > 1
+      shot_type =  "failure. You already fired there. Try again"
+    elsif cell.render == "M"
+      shot_type = "miss"
+    elsif cell.render == "X"
+      shot_type = "hit, the ship is sunk"
+    elsif cell.render == "H"
+      shot_type = "hit"
+    else
+      shot_type = "WTF PPL"
+    end
+    statement = "Your shot on #{cell.coordinate} was a #{shot_type}."
+    puts statement
+    statement
+  end
+
+  def cpu_shot_results(cell)
+    shot_type = nil
+    if cell.render == "M"
+      shot_type = "miss"
+    elsif cell.render == "X"
+      shot_type = "hit, the ship is sunk"
+    elsif cell.render == "H"
+      shot_type = "hit"
+    else
+      shot_type = "WTF PPL"
+    end
+    statement = "My shot on #{cell.coordinate} was a #{shot_type}."
+    puts statement
+    statement
+  end
+
   def hooman_fires_shot
-    @message.hooman_shot_coordinate_entry
+    print "Enter the coordinate for your shot: \n> "
     shot_input = gets.chomp.upcase
     cell_shot = @board.cells.fetch(shot_input) if @board.valid_coordinate?(shot_input)
     if cell_shot == nil
-      @message.hooman_invalid_shot_entry
+      puts "Please enter a valid coordinate."
       hooman_fires_shot
     elsif cell_shot.shots_fired == 0
       cell_shot.fire_upon
-      @message.hooman_shot_results(cell_shot)
+      hooman_shot_results(cell_shot)
     elsif cell_shot.shots_fired > 0
       cell_shot.fire_upon
-      @message.hooman_shot_results(cell_shot)
+      hooman_shot_results(cell_shot)
       hooman_fires_shot
     end
   end
@@ -94,7 +124,7 @@ class Player
     cell_shot = @board.cells.fetch(cpu_shot) if @board.valid_coordinate?(cpu_shot)
     if cell_shot.shots_fired == 0
       cell_shot.fire_upon
-      @message.cpu_shot_results(cell_shot)
+      cpu_shot_results(cell_shot)
     else
       cpu_fires_zee_missle
     end
