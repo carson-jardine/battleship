@@ -1,17 +1,15 @@
 require './lib/player'
-require './lib/message'
 
 class Game
-  attr_reader :message, :hooman, :cpu
+  attr_reader :hooman, :cpu
 
   def initialize
     @hooman = Player.new
     @cpu = Player.new
-    @message = Message.new
   end
 
   def start
-    @message.main_menu
+    print "Welcome to BATTLESHIP \nEnter p to play. Enter q to quit. \n> "
     user_input = gets.chomp.downcase
     if user_input == "p"
       run_game
@@ -30,11 +28,11 @@ class Game
       turn
     end
     if @cpu.ships_have_sunk?
-      @message.hooman_wins
+      puts "You won!"
       initialize
       start
     elsif @hooman.ships_have_sunk?
-      @message.cpu_wins
+      puts "I won! SUCK IT"
       initialize
       start
     else
