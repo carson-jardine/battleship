@@ -3,15 +3,14 @@ require './lib/cell'
 class Board
   attr_reader :cells, :letter_rows, :num_columns
 
-  def initialize(letter_rows = 4, num_columns = 4)
-    @letter_rows = letter_rows
-    @num_columns = num_columns
+  def initialize(board_size = 4)
+    @letter_rows = board_size
+    @num_columns = board_size
     @cells = build_cells
   end
 
   def build_cells
     @cells = {}
-
     num_range = (1..@num_columns).to_a
     letter_range = ("A"..(("A".ord) + (@letter_rows - 1)).chr).to_a
 
