@@ -60,8 +60,9 @@ class Player
       @board.place(ship, user_input)
       puts @board.render(true)
     else
-      puts "Those are invalid coordinates. Please try again."
-      hooman_place_ships
+      print "Those are invalid coordinates. Please try again. \n>"
+      user_input = gets.chomp.upcase.split(" ")
+      hooman_cell_placement(ship, user_input)
     end
   end
 
