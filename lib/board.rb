@@ -1,33 +1,27 @@
 require './lib/cell'
 
 class Board
-  attr_reader :cells
+  attr_reader :cells, :letter_rows, :num_columns
 
-  def initialize
+  def initialize(letter_rows = 4, num_columns = 4)
+    @letter_rows = letter_rows
+    @num_columns = num_columns
     @cells = build_cells
-    @num_count = 4
-    @letter_count = 4
   end
 
   def build_cells
-    @cells = {
-      "A1" => Cell.new("A1"),
-      "A2" => Cell.new("A2"),
-      "A3" => Cell.new("A3"),
-      "A4" => Cell.new("A4"),
-      "B1" => Cell.new("B1"),
-      "B2" => Cell.new("B2"),
-      "B3" => Cell.new("B3"),
-      "B4" => Cell.new("B4"),
-      "C1" => Cell.new("C1"),
-      "C2" => Cell.new("C2"),
-      "C3" => Cell.new("C3"),
-      "C4" => Cell.new("C4"),
-      "D1" => Cell.new("D1"),
-      "D2" => Cell.new("D2"),
-      "D3" => Cell.new("D3"),
-      "D4" => Cell.new("D4")
-    }
+    @cells = {}
+
+    num_range = (1..@num_columns).to_a
+    letter_range = ("A"..(("A".ord) + (@letter_rows - 1)).chr).to_a
+
+     num_range.each do |num|
+      letter_range.each do |letter|
+        temp =  letter + num.to_s
+        @cells[temp] = Cell.new(temp)
+      end
+    end
+    @cells = (@cells.sort_by {|coord, cell| coord.split('')}).to_h
   end
 
   def valid_coordinate?(cell)
@@ -90,12 +84,12 @@ class Board
   end
 
   def row_1_render
-    "  " + (1..@num_count).to_a.map { |num| num.to_s.concat(" ") }.join
+    "  " + (1..@num_columns).to_a.map { |num| num.to_s.concat(" ") }.join
   end
 
   def board_groups
-    (1..@letter_count).to_a.map do |i|
-      @cells.keys[((@num_count*i)-@num_count)..((@num_count*i)-1)]
+    (1..@letter_rows).to_a.map do |i|
+      @cells.keys[((@num_columns*i)-@num_columns)..((@num_columns*i)-1)]
     end
   end
 
