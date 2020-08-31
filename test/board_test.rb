@@ -22,6 +22,12 @@ class BoardTest < Minitest::Test
     assert_equal 16, @board.cells.keys.length
   end
 
+  def test_board_can_be_larger
+    board = Board.new(12)
+
+    assert_equal 144, board.cells.keys.length
+  end
+
   def test_has_valid_coordinates
     assert @board.valid_coordinate?("A1")
     assert @board.valid_coordinate?("D4")
