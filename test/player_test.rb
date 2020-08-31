@@ -15,62 +15,23 @@ class PlayerTest < Minitest::Test
     assert_instance_of Player, @cpu
   end
 
-  def test_cpu_can_place_cruiser
-    @cpu.cpu_place_cruiser
+  def test_cpu_can_place_ships
+    @cpu.cpu_place_ships
     test_array = @cpu.board.cells.values.select do |cell|
       cell if !cell.empty?
     end
-    bad_array = @cpu.board.cells.values.select do |cell|
-      cell if cell.empty?
-    end
-    assert_equal test_array[0].ship, @cpu.cruiser
-    assert_equal test_array[1].ship, @cpu.cruiser
-    assert_equal test_array[2].ship, @cpu.cruiser
-    refute_equal bad_array[1].ship, @cpu.cruiser
+    total_ship_cells = @cpu.ships.reduce(0) {|total, ship| total += ship.length}
+    assert_equal total_ship_cells, test_array.length
   end
 
-  def test_cpu_can_place_submarine
-    @cpu.cpu_place_sub
-    test_array = @cpu.board.cells.values.select do |cell|
-      cell if !cell.empty?
-    end
-    bad_array = @cpu.board.cells.values.select do |cell|
-      cell if cell.empty?
-    end
-
-    assert_equal test_array[0].ship, @cpu.submarine
-    assert_equal test_array[1].ship, @cpu.submarine
-    refute_equal bad_array[1].ship, @cpu.submarine
-  end
-
-  def test_hooman_can_place_cruiser
-    @hooman.hooman_place_cruiser
+  def test_hooman_can_place_ships
+    @hooman.hooman_place_ships
     test_array = @hooman.board.cells.values.select do |cell|
       cell if !cell.empty?
     end
-    bad_array = @hooman.board.cells.values.select do |cell|
-      cell if cell.empty?
-    end
+    total_ship_cells = @hooman.ships.reduce(0) {|total, ship| total += ship.length}
 
-    assert_equal test_array[0].ship, @hooman.cruiser
-    assert_equal test_array[1].ship, @hooman.cruiser
-    assert_equal test_array[2].ship, @hooman.cruiser
-    refute_equal bad_array[1].ship, @hooman.cruiser
-
-  end
-
-  def test_hooman_can_place_submarine
-    @hooman.hooman_place_sub
-    test_array = @hooman.board.cells.values.select do |cell|
-      cell if !cell.empty?
-    end
-    bad_array = @hooman.board.cells.values.select do |cell|
-      cell if cell.empty?
-    end
-
-    assert_equal test_array[0].ship, @hooman.submarine
-    assert_equal test_array[1].ship, @hooman.submarine
-    refute_equal bad_array[1].ship, @hooman.submarine
+    assert_equal total_ship_cells, test_array.length
   end
 
   def test_check_if_player_ships_have_sunk
@@ -101,6 +62,7 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_can_take_a_turn
+
     @cpu.hooman_fires_shot
 
 
@@ -116,6 +78,8 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_duplicated_shot
+
+
     cell_tested = @cpu.board.cells.fetch("B2")
     cell_tested.fire_upon
     puts "\nEnter B2 as your shot."
