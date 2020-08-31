@@ -4,8 +4,8 @@ require './lib/board'
 class Player
   attr_reader :board, :cruiser, :submarine, :ships
 
-  def initialize
-    @board = Board.new
+  def initialize(board_size = 4)
+    @board = Board.new(board_size)
     @cruiser = Ship.new("Cruiser", 3)
     @submarine = Ship.new("Submarine", 2)
     @ships = [@cruiser, @submarine]
