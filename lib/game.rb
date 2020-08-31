@@ -27,7 +27,11 @@ class Game
     while !@cpu.ships_have_sunk? && !@hooman.ships_have_sunk?
       turn
     end
-    if @cpu.ships_have_sunk?
+    if @cpu.ships_have_sunk? && @hooman.ships_have_sunk?
+      puts "Let's call this a tie."
+      initialize
+      start
+    elsif @cpu.ships_have_sunk?
       puts "You won!"
       initialize
       start
