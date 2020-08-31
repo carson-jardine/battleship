@@ -35,7 +35,7 @@ class PlayerTest < Minitest::Test
   end
 
   def test_check_if_player_ships_have_sunk
-    # skip
+
     assert_equal false, @cpu.ships_have_sunk?
 
     @cpu.cruiser.hit
@@ -48,8 +48,6 @@ class PlayerTest < Minitest::Test
   end
 
   def test_cpu_can_take_a_turn
-    # skip
-
     @hooman.cpu_fires_zee_missle
 
     test_array = @hooman.board.cells.values.select do |cell|
@@ -64,7 +62,7 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_can_take_a_turn
-    # skip
+
     @cpu.hooman_fires_shot
 
 
@@ -80,7 +78,7 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_duplicated_shot
-    # skip
+
 
     cell_tested = @cpu.board.cells.fetch("B2")
     cell_tested.fire_upon

@@ -11,7 +11,21 @@ class Player
     @ships = [@cruiser, @submarine]
   end
 
+
   def cell_placement(ship)
+    cons_num_place = setup_cpu_coords(ship)[0]
+    cons_letter_place = setup_cpu_coords(ship)[1]
+
+    if @board.valid_placement?(ship, cons_num_place)
+      @board.place(ship, cons_num_place)
+    elsif @board.valid_placement?(ship, cons_letter_place)
+      @board.place(ship, cons_letter_place)
+    else
+      cell_placement(ship)
+    end
+  end
+
+  def setup_cpu_coords(ship)
     initial_cell = @board.cells.keys.shuffle[0]
     initial_letter = initial_cell.split('').shift
     initial_number = initial_cell.split('')[1].to_i
@@ -20,13 +34,7 @@ class Player
     ordinal_range = (initial_letter.ord..(initial_letter.ord + (ship.length - 1)))
     letter_range = ordinal_range.to_a.map {|ord_value| ord_value.chr}
     cons_letter_place = letter_range.map { |letter| letter + initial_number.to_s }
-    if @board.valid_placement?(ship, cons_num_place)
-      @board.place(ship, cons_num_place)
-    elsif @board.valid_placement?(ship, cons_letter_place)
-      @board.place(ship, cons_letter_place)
-    else
-      cell_placement(ship)
-    end
+    return cons_num_place, cons_letter_place
   end
 
   def cpu_place_ships
@@ -70,9 +78,7 @@ class Player
     else
       shot_type = "WTF PPL"
     end
-    statement = "Your shot on #{cell.coordinate} was a #{shot_type}."
-    puts statement
-    statement
+    puts "Your shot on #{cell.coordinate} was a #{shot_type}."
   end
 
   def cpu_shot_results(cell)
@@ -86,9 +92,7 @@ class Player
     else
       shot_type = "WTF PPL"
     end
-    statement = "My shot on #{cell.coordinate} was a #{shot_type}."
-    puts statement
-    statement
+    puts "My shot on #{cell.coordinate} was a #{shot_type}."
   end
 
   def hooman_fires_shot
