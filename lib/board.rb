@@ -92,16 +92,48 @@ class Board
   end
 
   def rest_of_rows
-    board_groups.map do |group|
-      "\n" + split_letter(group)[0] + " " +
-      @cells.values_at(*group).map { |cell_object| cell_object.render + " " }.join
+    if @board_size >= 10
+      board_groups.map do |group|
+        run = 0
+        "\n" + split_letter(group)[0] + " " +
+        @cells.values_at(*group).map do |cell_object|
+          run += 1
+          cell_object.render +
+          if run < 10
+            " "
+          else run >= 10
+            "  "
+          end
+        end.join
+      end
+    else
+      board_groups.map do |group|
+        "\n" + split_letter(group)[0] + " " +
+        @cells.values_at(*group).map { |cell_object| cell_object.render + " " }.join
+      end
     end
   end
 
   def rest_of_rows_show_ship_true
-    board_groups.map do |group|
-      "\n" + split_letter(group)[0] + " " +
-      @cells.values_at(*group).map { |cell_object| cell_object.render(true) + " " }.join
+    if @board_size >= 10
+      board_groups.map do |group|
+        run = 0
+        "\n" + split_letter(group)[0] + " " +
+        @cells.values_at(*group).map do |cell_object|
+          run += 1
+          cell_object.render(true) +
+          if run < 10
+            " "
+          else run >= 10
+            "  "
+          end
+        end.join
+      end
+    else
+      board_groups.map do |group|
+        "\n" + split_letter(group)[0] + " " +
+        @cells.values_at(*group).map { |cell_object| cell_object.render(true) + " " }.join
+      end
     end
   end
 

@@ -40,7 +40,7 @@ class Game
   def custom_game
     print "How big would you like to make your board? Please enter a number greater than 4 \n> "
     @board_size = gets.strip.chomp.to_i
-    until @board_size.class == Integer
+    if @board_size.class != Integer
       print "Please enter a number, it's not that hard... \n> "
       @board_size = gets.strip.chomp.to_i
     end
