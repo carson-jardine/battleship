@@ -111,9 +111,10 @@ class Player
     end
     cell_shot = @board.cells.fetch(shot_input)
     hooman_fires_duplicated_shot?(cell_shot)
+    hooman_shot_results(cell_shot)
   end
 
-  def hooman_fires_duplicated_shot?(cell_shot = "B2")
+  def hooman_fires_duplicated_shot?(cell_shot)
     if cell_shot.shots_fired > 0
       cell_shot.fire_upon
       hooman_shot_results(cell_shot)
@@ -123,32 +124,39 @@ class Player
     end
   end
 
-  def hooman_take_shot(cell_shot = "A1")
+  def hooman_take_shot(cell_shot)
       cell_shot.fire_upon
-      hooman_shot_results(cell_shot)
   end
 
   def cpu_fires_zee_missle
-    if find_cells_hit == []
-      cpu_shot = @board.cells.keys.shuffle[3]
-    else
-      generate_adjacent_cells(find_cells_hit).each do |coord|
-        if @board.valid_coordinate?(coord) && !@board.cells[coord].fired_upon?
-          cpu_shot = coord
-        end
-      end
-    end
+    cell_shot = cpu_fire_helper
+    cpu_shot_results(cell_shot)
+    sleep(1)
+  end
 
-    if @board.valid_coordinate?(cpu_shot)
-      cell_shot = @board.cells.fetch(cpu_shot)
-    end
+  def cpu_fire_helper
+    cell_shot = pick_a_cell
 
     if cell_shot.shots_fired == 0
       cell_shot.fire_upon
-      cpu_shot_results(cell_shot)
+      return cell_shot
     else
-      cpu_fires_zee_missle
+      pick_a_cell
     end
+  end
+
+  def pick_a_cell
+    if find_cells_hit == []
+      cpu_shot = @board.cells.keys.shuffle[0]
+      until @board.valid_coordinate?(cpu_shot) && !@board.cells[cpu_shot].fired_upon?
+        cpu_shot = @board.cells.keys.shuffle[0]
+      end
+    else
+      generate_adjacent_cells(find_cells_hit).each do |coord|
+        cpu_shot = coord if @board.valid_coordinate?(coord) && !@board.cells[coord].fired_upon?
+      end
+    end
+      cell_shot = @board.cells.fetch(cpu_shot)
   end
 
   def find_cells_hit

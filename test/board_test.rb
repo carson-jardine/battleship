@@ -4,7 +4,6 @@ require './lib/board'
 require './lib/ship'
 require './lib/cell'
 require './lib/player'
-require 'mocha/minitest'
 
 class BoardTest < Minitest::Test
 
@@ -12,7 +11,6 @@ class BoardTest < Minitest::Test
     @board = Board.new
     @cruiser = Ship.new("Cruiser", 3)
     @submarine = Ship.new("Submarine", 2)
-    # require "pry"; binding.pry
   end
 
   def test_it_exists
@@ -161,14 +159,13 @@ class BoardTest < Minitest::Test
   def test_place_different_ships_on_new_board
     game_ships = {'Bob' => 3}
     comp = Player.new(game_ships, 12)
-    # require "pry"; binding.pry
-    # puts "PLEASE ENTER h1 h2 h3 AS YOUR COORDS \n"
-    comp.hooman_place_ships.stubs(:user_input).returns("h1 h2 h3")
 
-    refute_nil comp.board.cells["H1"].ship
-    refute_nil comp.board.cells["H2"].ship
-    refute_nil comp.board.cells["H3"].ship
-    assert_nil comp.board.cells["A1"].ship
+    comp.hooman_cell_placement
+
+    refute_nil comp.board.cells["A1"].ship
+    refute_nil comp.board.cells["A2"].ship
+    refute_nil comp.board.cells["A3"].ship
+    assert_nil comp.board.cells["B1"].ship
   end
 
 end
