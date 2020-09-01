@@ -51,7 +51,7 @@ class Player
     puts @board.render
     @ships.each do |ship|
       print "Enter the squares for the #{ship.name} (#{ship.length.to_s} spaces): \n> "
-      user_input = gets.chomp.upcase.split(" ")
+      user_input = gets.strip.chomp.upcase.split(" ")
       hooman_cell_placement(ship, user_input)
     end
   end
@@ -62,7 +62,7 @@ class Player
       puts @board.render(true)
     else
       print "Those are invalid coordinates. Please try again. \n>"
-      user_input = gets.chomp.upcase.split(" ")
+      user_input = gets.strip.chomp.upcase.split(" ")
       hooman_cell_placement(ship, user_input)
     end
   end
@@ -99,7 +99,7 @@ class Player
 
   def hooman_fires_shot
     print "Enter the coordinate for your shot: \n> "
-    shot_input = gets.chomp.upcase
+    shot_input = gets.strip.chomp.upcase
     cell_shot = @board.cells.fetch(shot_input) if @board.valid_coordinate?(shot_input)
     if cell_shot == nil
       puts "Please enter a valid coordinate."
