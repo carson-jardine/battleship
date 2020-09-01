@@ -37,12 +37,13 @@ class PlayerTest < Minitest::Test
   def test_check_if_player_ships_have_sunk
 
     assert_equal false, @cpu.ships_have_sunk?
-
-    @cpu.cruiser.hit
-    @cpu.cruiser.hit
-    @cpu.cruiser.hit
-    @cpu.submarine.hit
-    @cpu.submarine.hit
+    require "pry"; binding.pry
+    @cpu.ships[0].length.times do |i|
+      @cpu.ships[0].hit
+    end
+    @cpu.ships[1].length.times do |i|
+      @cpu.ships[1].hit
+    end
 
     assert @cpu.ships_have_sunk?
   end
@@ -110,7 +111,6 @@ class PlayerTest < Minitest::Test
     end
 
     assert_equal 2, cell_tested.shots_fired
-    assert_equal 1, test_array[0].shots_fired
     assert_equal false, bad_array[4].fired_upon?
 
   end

@@ -118,13 +118,15 @@ class Player
     if find_cells_hit == []
       cpu_shot = @board.cells.keys.shuffle[3]
     else
-      until @board.valid_coordinate?(cpu_shot)
-        generate_adjacent_cells(find_cells_hit).each do |coord|
-          cpu_shot = coord
-        end
+      generate_adjacent_cells(find_cells_hit).each do |coord|
+          if @board.valid_coordinate?(coord) && !@board.cells[coord].fired_upon?
+            cpu_shot = coord
+          end
       end
     end
-    cell_shot = @board.cells.fetch(cpu_shot) if @board.valid_coordinate?(cpu_shot)
+    if @board.valid_coordinate?(cpu_shot)
+      cell_shot = @board.cells.fetch(cpu_shot)
+    end
     if cell_shot.shots_fired == 0
       cell_shot.fire_upon
       cpu_shot_results(cell_shot)
