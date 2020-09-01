@@ -162,6 +162,7 @@ class BoardTest < Minitest::Test
     game_ships = {'Bob' => 3}
     comp = Player.new(game_ships, 12)
 
+    puts "PLEASE ENTER h1 h2 h3 AS YOUR COORDS \n"
     comp.hooman_place_ships.stubs(:user_input).returns("h1 h2 h3")
 
     refute_nil comp.board.cells["H1"].ship
