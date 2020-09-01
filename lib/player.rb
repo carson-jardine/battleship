@@ -148,7 +148,7 @@ class Player
     coord_array.map do |coord|
       split_coord = coord.split('')
       ord_letter = split_coord.first.ord
-      int_num = split_coord.last.to_i
+      int_num = split_coord.last(split_coord.count-1).join.to_i
       letters = [ord_letter.chr, ord_letter.chr, (ord_letter - 1).chr, (ord_letter + 1).chr]
       numbers = [(int_num + 1).to_s, (int_num - 1).to_s, split_coord[1], split_coord[1]]
       letters.zip(numbers).map { |coords| coords.join }
