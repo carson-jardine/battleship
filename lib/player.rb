@@ -50,6 +50,7 @@ class Player
     puts "I have laid out my ships on the grid. \nYou now need to lay out your ships. \n"
     puts @board.render
     place_ship_input
+    puts @board.render(true)
   end
 
   def place_ship_input
@@ -66,7 +67,6 @@ class Player
 
   def hooman_cell_placement(ship = Ship.new("Cruiser", 3), user_input = ["A1", "A2", "A3"])
     @board.place(ship, user_input)
-    puts @board.render(true)
   end
 
   def hooman_shot_results(cell)
@@ -100,18 +100,27 @@ class Player
   def hooman_fires_shot
     print "Enter the coordinate for your shot: \n> "
     shot_input = gets.strip.chomp.upcase
-    cell_shot = @board.cells.fetch(shot_input) if @board.valid_coordinate?(shot_input)
-    if cell_shot == nil
-      puts "Please enter a valid coordinate \u{1f644}"
-      hooman_fires_shot
-    elsif cell_shot.shots_fired == 0
-      cell_shot.fire_upon
-      hooman_shot_results(cell_shot)
-    elsif cell_shot.shots_fired > 0
-      cell_shot.fire_upon
-      hooman_shot_results(cell_shot)
-      hooman_fires_shot
+    until @board.valid_coordinate?(shot_input)
+      print "Please enter a valid coordinate \n\u{1f644} "
+      shot_input = gets.strip.chomp.upcase
     end
+    cell_shot = @board.cells.fetch(shot_input)
+    hooman_fires_duplicated_shot?(cell_shot)
+  end
+
+  def hooman_fires_duplicated_shot?(cell_shot = "B2")
+    if cell_shot.shots_fired > 0
+      cell_shot.fire_upon
+      hooman_shot_results(cell_shot)
+      hooman_fires_shot
+    else
+      hooman_take_shot(cell_shot)
+    end
+  end
+
+  def hooman_take_shot(cell_shot = "A1")
+      cell_shot.fire_upon
+      hooman_shot_results(cell_shot)
   end
 
   def cpu_fires_zee_missle
@@ -130,7 +139,6 @@ class Player
     end
 
     if cell_shot.shots_fired == 0
-      #got an error here "undefined method shots fired for nil:NilClass"
       cell_shot.fire_upon
       cpu_shot_results(cell_shot)
     else
