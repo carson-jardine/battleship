@@ -114,7 +114,15 @@ class Player
   end
 
   def cpu_fires_zee_missle
-    cpu_shot = @board.cells.keys.shuffle[3]
+    if find_cells_hit == []
+      cpu_shot = @board.cells.keys.shuffle[3]
+    else
+      until @board.valid_coordinate?(cpu_shot)
+        generate_adjacent_cells(find_cells_hit).each do |coord|
+          cpu_shot = coord
+        end
+      end
+    end
     cell_shot = @board.cells.fetch(cpu_shot) if @board.valid_coordinate?(cpu_shot)
     if cell_shot.shots_fired == 0
       cell_shot.fire_upon
@@ -124,5 +132,24 @@ class Player
     end
   end
 
+  def find_cells_hit
+    cpu_hits_cells = @board.cells.values.select do |cell|
+      cell if cell.fired_upon? && cell.empty? == false && cell.ship.sunk? == false
+    end
+    cpu_hits_cells.map do |cell|
+      @board.cells.key(cell)
+    end
+  end
+
+  def generate_adjacent_cells(coord_array)
+    coord_array.map do |coord|
+      split_coord = coord.split('')
+      ord_letter = split_coord.first.ord
+      int_num = split_coord.last.to_i
+      letters = [ord_letter.chr, ord_letter.chr, (ord_letter - 1).chr, (ord_letter + 1).chr]
+      numbers = [(int_num + 1).to_s, (int_num - 1).to_s, split_coord[1], split_coord[1]]
+      letters.zip(numbers).map { |coords| coords.join }
+    end.flatten
+  end
 
 end
