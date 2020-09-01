@@ -12,7 +12,7 @@ class Game
 
   def start
     print "Welcome to BATTLESHIP \nEnter p to play. Enter q to quit. \n> "
-    user_input = gets.chomp.downcase
+    user_input = gets.strip.chomp.downcase
     if user_input == "p"
       game_setup
     elsif user_input == "q"
@@ -26,7 +26,7 @@ class Game
 
   def game_setup
     print "Sweet! Do you want to play with a custom board size and custom ships? Enter y or n \n> "
-    user_input = gets.chomp.downcase
+    user_input = gets.strip.chomp.downcase
     if user_input == 'y'
       custom_game
     elsif user_input == 'n'
@@ -39,10 +39,10 @@ class Game
 
   def custom_game
     print "How big would you like to make your board? Please enter a number greater than 4 \n> "
-    @board_size = gets.chomp.to_i
-    until @board_size.class == Integer
+    @board_size = gets.strip.chomp.to_i
+    if @board_size.class != Integer
       print "Please enter a number, it's not that hard... \n> "
-      @board_size = gets.chomp.to_i
+      @board_size = gets.strip.chomp.to_i
     end
 
     set_custom_ships
@@ -54,19 +54,19 @@ class Game
     puts "Hokay, now it's time to build some ships"
     @ships.clear
     print "How many ships would you like to have? \n> "
-    ship_count = gets.chomp.to_i
+    ship_count = gets.strip.chomp.to_i
 
     loop_counter = 1
     loop do
       print "What would you like ship number #{loop_counter.to_s} to be called? \n> "
-      ship_name = gets.chomp.capitalize
+      ship_name = gets.strip.chomp.capitalize
 
       print "How long do you want #{ship_name} to be? Please enter a number less than #{@board_size.to_s} \n> "
-      ship_length = gets.chomp.to_i
+      ship_length = gets.strip.chomp.to_i
 
       until ship_length <= @board_size
         print "I told you LESS than #{@board_size.to_s}. Try again  \n> "
-        ship_length = gets.chomp.to_i
+        ship_length = gets.strip.chomp.to_i
       end
       @ships[ship_name] = ship_length
 
@@ -101,9 +101,12 @@ class Game
   end
 
   def turn
+    system "clear"
     display_boards
     @cpu.hooman_fires_shot
     @hooman.cpu_fires_zee_missle
+    sleep(1)
+    # want to do this but show the log
   end
 
   def display_boards
