@@ -38,11 +38,12 @@ class PlayerTest < Minitest::Test
 
     assert_equal false, @cpu.ships_have_sunk?
 
-    @cpu.cruiser.hit
-    @cpu.cruiser.hit
-    @cpu.cruiser.hit
-    @cpu.submarine.hit
-    @cpu.submarine.hit
+    @cpu.ships[0].length.times do |i|
+      @cpu.ships[0].hit
+    end
+    @cpu.ships[1].length.times do |i|
+      @cpu.ships[1].hit
+    end
 
     assert @cpu.ships_have_sunk?
   end
@@ -95,7 +96,6 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_duplicated_shot
-
 
     cell_tested = @cpu.board.cells.fetch("B2")
     cell_tested.fire_upon
