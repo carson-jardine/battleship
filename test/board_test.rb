@@ -3,18 +3,19 @@ require 'minitest/pride'
 require './lib/board'
 require './lib/ship'
 require './lib/cell'
+require './lib/player'
+require 'mocha/minitest'
 
 class BoardTest < Minitest::Test
 
   def setup
-    @board = Board.new(board_size = 10)
+    @board = Board.new
     @cruiser = Ship.new("Cruiser", 3)
     @submarine = Ship.new("Submarine", 2)
-    require "pry"; binding.pry
+    # require "pry"; binding.pry
   end
 
   def test_it_exists
-    # require "pry"; binding.pry
     assert_instance_of Board, @board
   end
 
@@ -156,4 +157,17 @@ class BoardTest < Minitest::Test
     assert_equal expected, @board.render
     assert_equal expected_true, @board.render(true)
   end
+
+  def test_place_different_ships_on_new_board
+    game_ships = {'Bob' => 3}
+    comp = Player.new(game_ships, 12)
+
+    comp.hooman_place_ships.stubs(:user_input).returns("h1 h2 h3")
+
+    refute_nil comp.board.cells["H1"].ship
+    refute_nil comp.board.cells["H2"].ship
+    refute_nil comp.board.cells["H3"].ship
+    assert_nil comp.board.cells["A1"].ship
+  end
+
 end

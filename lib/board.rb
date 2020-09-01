@@ -9,17 +9,17 @@ class Board
   end
 
   def build_cells
-    @cells = {}
+    cells = {}
     num_range = (1..@board_size).to_a
     letter_range = ("A"..(("A".ord) + (@board_size - 1)).chr).to_a
 
-     num_range.each do |num|
-      letter_range.each do |letter|
-        temp =  letter + num.to_s
-        @cells[temp] = Cell.new(temp)
+    letter_range.each do |letter|
+      num_range.each do |num|
+        coordinate =  letter + num.to_s
+        cells[coordinate] = Cell.new(coordinate)
       end
     end
-    @cells = (@cells.sort_by {|coord, cell| coord.split('')}).to_h
+    cells
   end
 
   def valid_coordinate?(cell)

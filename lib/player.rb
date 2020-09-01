@@ -47,7 +47,7 @@ class Player
   end
 
   def hooman_place_ships
-    puts "I have laid out my ships on the grid. \nYou now need to lay out your two ships. \nThe Cruiser is three units long and the Submarine is two units long.\n"
+    puts "I have laid out my ships on the grid. \nYou now need to lay out your ships. \n"
     puts @board.render
     @ships.each do |ship|
       print "Enter the squares for the #{ship.name} (#{ship.length.to_s} spaces): \n> "
