@@ -37,7 +37,7 @@ class PlayerTest < Minitest::Test
   def test_check_if_player_ships_have_sunk
 
     assert_equal false, @cpu.ships_have_sunk?
-    require "pry"; binding.pry
+
     @cpu.ships[0].length.times do |i|
       @cpu.ships[0].hit
     end
@@ -96,7 +96,6 @@ class PlayerTest < Minitest::Test
   end
 
   def test_hooman_duplicated_shot
-
 
     cell_tested = @cpu.board.cells.fetch("B2")
     cell_tested.fire_upon
