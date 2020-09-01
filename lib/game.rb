@@ -105,10 +105,12 @@ class Game
     elsif @cpu.ships_have_sunk?
       puts "Wowwww you beat a computer, you're sooooo smart \u{1f644}"
       initialize
+      sleep(1)
       start
     elsif @hooman.ships_have_sunk?
       puts "I won! SUCK IT"
       initialize
+      sleep(1)
       start
     else
       puts "You broke the game, idiot \u{1f644}"
@@ -125,7 +127,7 @@ class Game
     system "clear"
     puts "\n \n"
     puts "=============COMPUTER BOARD============="
-    print @cpu.board.render
+    print @cpu.board.render(true)
     puts "\n"
     puts "==============HOOMAN BOARD=============="
     print @hooman.board.render(true)
