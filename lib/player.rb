@@ -51,7 +51,7 @@ class Player
     puts @board.render
     @ships.each do |ship|
       print "Enter the squares for the #{ship.name} (#{ship.length.to_s} spaces): \n> "
-      user_input = gets.chomp.upcase.split(" ")
+      user_input = gets.strip.chomp.upcase.split(" ")
       hooman_cell_placement(ship, user_input)
     end
   end
@@ -61,8 +61,9 @@ class Player
       @board.place(ship, user_input)
       puts @board.render(true)
     else
+
       print "Those are invalid coordinates. Please try again. \n\u{1f644} "
-      user_input = gets.chomp.upcase.split(" ")
+      user_input = gets.strip.chomp.upcase.split(" ")
       hooman_cell_placement(ship, user_input)
     end
   end
@@ -97,7 +98,7 @@ class Player
 
   def hooman_fires_shot
     print "Enter the coordinate for your shot: \n> "
-    shot_input = gets.chomp.upcase
+    shot_input = gets.strip.chomp.upcase
     cell_shot = @board.cells.fetch(shot_input) if @board.valid_coordinate?(shot_input)
     if cell_shot == nil
       puts "Please enter a valid coordinate \u{1f644}"
@@ -149,7 +150,7 @@ class Player
     coord_array.map do |coord|
       split_coord = coord.split('')
       ord_letter = split_coord.first.ord
-      int_num = split_coord.last.to_i
+      int_num = split_coord.last(split_coord.count-1).join.to_i
       letters = [ord_letter.chr, ord_letter.chr, (ord_letter - 1).chr, (ord_letter + 1).chr]
       numbers = [(int_num + 1).to_s, (int_num - 1).to_s, split_coord[1], split_coord[1]]
       letters.zip(numbers).map { |coords| coords.join }

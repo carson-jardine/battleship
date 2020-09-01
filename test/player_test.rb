@@ -110,7 +110,6 @@ class PlayerTest < Minitest::Test
     end
 
     assert_equal 2, cell_tested.shots_fired
-    assert_equal 1, test_array[0].shots_fired
     assert_equal false, bad_array[4].fired_upon?
 
   end
