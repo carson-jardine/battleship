@@ -61,7 +61,7 @@ class Game
       print "Please enter a number, it's not that hard... \n\u{1f644} "
       ship_count= gets.strip.chomp.to_i
     end
-
+    ##### write new method for this long ass shit
     loop_counter = 1
     loop do
       print "What would you like ship number #{loop_counter.to_s} to be called? \n> "
@@ -97,12 +97,6 @@ class Game
     end_game
   end
 
-  def turn
-    display_boards
-    @cpu.hooman_fires_shot
-    @hooman.cpu_fires_zee_missle
-  end
-
   def end_game
     if @cpu.ships_have_sunk? && @hooman.ships_have_sunk?
       puts "Let's call this a tie."
@@ -117,20 +111,18 @@ class Game
       initialize
       start
     else
-      puts "Oh no, what happened?"
+      puts "You broke the game, idiot \u{1f644}"
     end
   end
 
   def turn
-    system "clear"
     display_boards
     @cpu.hooman_fires_shot
     @hooman.cpu_fires_zee_missle
-    sleep(1)
-    # want to do this but show the log
   end
 
   def display_boards
+    system "clear"
     puts "\n \n"
     puts "=============COMPUTER BOARD============="
     print @cpu.board.render

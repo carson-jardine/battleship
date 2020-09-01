@@ -13,33 +13,38 @@ class Player
     game_ships.map { |name, length| Ship.new(name, length) }
   end
 
-  def cell_placement(ship)
-    cons_num_place = setup_cpu_coords(ship)[0]
-    cons_letter_place = setup_cpu_coords(ship)[1]
-
-    if @board.valid_placement?(ship, cons_num_place)
-      @board.place(ship, cons_num_place)
-    elsif @board.valid_placement?(ship, cons_letter_place)
-      @board.place(ship, cons_letter_place)
+  def cell_placement(ship, cons_nums, cons_letters)
+    if @board.valid_placement?(ship, cons_nums)
+      @board.place(ship, cons_nums)
+    elsif @board.valid_placement?(ship, cons_letters)
+      @board.place(ship, cons_letters)
     else
-      cell_placement(ship)
+      setup_cpu_coords(ship)
     end
   end
 
   def setup_cpu_coords(ship)
-    initial_cell = @board.cells.keys.shuffle[0]
-    initial_letter = initial_cell.split('').shift
-    initial_number = initial_cell.split('')[1].to_i
+    initial_cell = @board.cells.keys.shuffle[0].split('')
+    initial_letter = initial_cell.shift
+    initial_number = initial_cell.last(initial_cell.count).join.to_i
+    cons_nums = find_cons_nums(ship, initial_number, initial_letter)
+    cons_letters = find_cons_letters(ship, initial_number, initial_letter)
+    cell_placement(ship, cons_nums, cons_letters)
+  end
+
+  def find_cons_nums(ship, initial_number, initial_letter)
     num_range = (initial_number..initial_number + (ship.length - 1)).to_a
-    cons_num_place = num_range.map { |num| initial_letter + num.to_s }
+    num_range.map { |num| initial_letter + num.to_s }
+  end
+
+  def find_cons_letters(ship, initial_number, initial_letter)
     ordinal_range = (initial_letter.ord..(initial_letter.ord + (ship.length - 1)))
     letter_range = ordinal_range.to_a.map {|ord_value| ord_value.chr}
-    cons_letter_place = letter_range.map { |letter| letter + initial_number.to_s }
-    return cons_num_place, cons_letter_place
+    letter_range.map { |letter| letter + initial_number.to_s }
   end
 
   def cpu_place_ships
-    @ships.each {|ship| cell_placement(ship)}
+    @ships.each {|ship| setup_cpu_coords(ship)}
   end
 
   def ships_have_sunk?
@@ -49,23 +54,24 @@ class Player
   def hooman_place_ships
     puts "I have laid out my ships on the grid. \nYou now need to lay out your ships. \n"
     puts @board.render
+    place_ship_input
+    puts @board.render(true)
+  end
+
+  def place_ship_input
     @ships.each do |ship|
       print "Enter the squares for the #{ship.name} (#{ship.length.to_s} spaces): \n> "
       user_input = gets.strip.chomp.upcase.split(" ")
+      until @board.valid_placement?(ship, user_input)
+        print "Those are invalid coordinates. Please try again. \n\u{1f644} "
+        user_input = gets.strip.chomp.upcase.split(" ")
+      end
       hooman_cell_placement(ship, user_input)
     end
   end
 
-  def hooman_cell_placement(ship, user_input)
-    if @board.valid_placement?(ship, user_input)
-      @board.place(ship, user_input)
-      puts @board.render(true)
-    else
-
-      print "Those are invalid coordinates. Please try again. \n\u{1f644} "
-      user_input = gets.strip.chomp.upcase.split(" ")
-      hooman_cell_placement(ship, user_input)
-    end
+  def hooman_cell_placement(ship = Ship.new("Cruiser", 3), user_input = ["A1", "A2", "A3"])
+    @board.place(ship, user_input)
   end
 
   def hooman_shot_results(cell)
@@ -99,42 +105,58 @@ class Player
   def hooman_fires_shot
     print "Enter the coordinate for your shot: \n> "
     shot_input = gets.strip.chomp.upcase
-    cell_shot = @board.cells.fetch(shot_input) if @board.valid_coordinate?(shot_input)
-    if cell_shot == nil
-      puts "Please enter a valid coordinate \u{1f644}"
-      hooman_fires_shot
-    elsif cell_shot.shots_fired == 0
+    until @board.valid_coordinate?(shot_input)
+      print "Please enter a valid coordinate \n\u{1f644} "
+      shot_input = gets.strip.chomp.upcase
+    end
+    cell_shot = @board.cells.fetch(shot_input)
+    hooman_fires_duplicated_shot?(cell_shot)
+    hooman_shot_results(cell_shot)
+  end
+
+  def hooman_fires_duplicated_shot?(cell_shot)
+    if cell_shot.shots_fired > 0
       cell_shot.fire_upon
       hooman_shot_results(cell_shot)
-    elsif cell_shot.shots_fired > 0
-      cell_shot.fire_upon
-      hooman_shot_results(cell_shot)
       hooman_fires_shot
+    else
+      hooman_take_shot(cell_shot)
     end
   end
 
-  def cpu_fires_zee_missle
-    if find_cells_hit == []
-      cpu_shot = @board.cells.keys.shuffle[3]
-    else
-      generate_adjacent_cells(find_cells_hit).each do |coord|
-        if @board.valid_coordinate?(coord) && !@board.cells[coord].fired_upon?
-          cpu_shot = coord
-        end
-      end
-    end
+  def hooman_take_shot(cell_shot)
+      cell_shot.fire_upon
+  end
 
-    if @board.valid_coordinate?(cpu_shot)
-      cell_shot = @board.cells.fetch(cpu_shot)
-    end
+  def cpu_fires_zee_missle
+    cell_shot = cpu_fire_helper
+    cpu_shot_results(cell_shot)
+    sleep(1)
+  end
+
+  def cpu_fire_helper
+    cell_shot = pick_a_cell
 
     if cell_shot.shots_fired == 0
-      #got an error here "undefined method shots fired for nil:NilClass"
       cell_shot.fire_upon
-      cpu_shot_results(cell_shot)
+      return cell_shot
     else
-      cpu_fires_zee_missle
+      pick_a_cell
     end
+  end
+
+  def pick_a_cell
+    if find_cells_hit == []
+      cpu_shot = @board.cells.keys.shuffle[0]
+      until @board.valid_coordinate?(cpu_shot) && !@board.cells[cpu_shot].fired_upon?
+        cpu_shot = @board.cells.keys.shuffle[0]
+      end
+    else
+      generate_adjacent_cells(find_cells_hit).each do |coord|
+        cpu_shot = coord if @board.valid_coordinate?(coord) && !@board.cells[coord].fired_upon?
+      end
+    end
+      cell_shot = @board.cells.fetch(cpu_shot)
   end
 
   def find_cells_hit
