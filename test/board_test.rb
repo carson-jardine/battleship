@@ -7,9 +7,10 @@ require './lib/cell'
 class BoardTest < Minitest::Test
 
   def setup
-    @board = Board.new
+    @board = Board.new(board_size = 10)
     @cruiser = Ship.new("Cruiser", 3)
     @submarine = Ship.new("Submarine", 2)
+    require "pry"; binding.pry
   end
 
   def test_it_exists

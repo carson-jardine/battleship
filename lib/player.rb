@@ -6,8 +6,6 @@ class Player
 
   def initialize(game_ships = {'Submarine' => 2, 'Cruiser' =>3 }, board_size = 4)
     @board = Board.new(board_size)
-    # @cruiser = Ship.new("Cruiser", 3)
-    # @submarine = Ship.new("Submarine", 2)
     @ships = build_ships(game_ships)
   end
 
