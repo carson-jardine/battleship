@@ -2,15 +2,18 @@ require './lib/ship'
 require './lib/board'
 
 class Player
-  attr_reader :board, :cruiser, :submarine, :ships
+  attr_reader :board, :ships
 
-  def initialize(board_size = 4)
+  def initialize(game_ships = {'Submarine' => 2, 'Cruiser' =>3 }, board_size = 4)
     @board = Board.new(board_size)
-    @cruiser = Ship.new("Cruiser", 3)
-    @submarine = Ship.new("Submarine", 2)
-    @ships = [@cruiser, @submarine]
+    # @cruiser = Ship.new("Cruiser", 3)
+    # @submarine = Ship.new("Submarine", 2)
+    @ships = build_ships(game_ships)
   end
 
+  def build_ships(game_ships)
+    game_ships.map { |name, length| Ship.new(name, length) }
+  end
 
   def cell_placement(ship)
     cons_num_place = setup_cpu_coords(ship)[0]
@@ -42,7 +45,7 @@ class Player
   end
 
   def ships_have_sunk?
-    @cruiser.sunk? && @submarine.sunk?
+    @ships.all? {|ship| ship.sunk?}
   end
 
   def hooman_place_ships

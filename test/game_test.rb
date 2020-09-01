@@ -9,6 +9,7 @@ class GameTest < Minitest::Test
 
   def setup
     @game = Game.new
+    require "pry"; binding.pry
     @board = Board.new
     @hooman = Player.new
     @cpu = Player.new

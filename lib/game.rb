@@ -1,18 +1,22 @@
 require './lib/player'
 
 class Game
-  attr_reader :hooman, :cpu
+  attr_reader :board_size, :ships
 
-  def initialize
-
+  def initialize(board_size = 4)
+    @board_size = board_size
+    @ships = {'Cruiser' => 3, 'Submarine' => 2}
+    @hooman = nil
+    @cpu = nil
   end
 
   def start
     print "Welcome to BATTLESHIP \nEnter p to play. Enter q to quit. \n> "
     user_input = gets.chomp.downcase
     if user_input == "p"
-      set_board_size
+      game_setup
     elsif user_input == "q"
+      puts "Okay, quitter. BYEEEEE"
       exit
     else
       puts "Do you listen??? Let's try again"
@@ -20,27 +24,81 @@ class Game
     end
   end
 
-  def set_board_size
-    print "The standard board is 4 columns and 4 rows. \nWould you like to make the board bigger? (y/n) \n> "
+  def game_setup
+    print "Sweet! Do you want to play with a custom board size and custom ships? Enter y or n \n> "
     user_input = gets.chomp.downcase
-    if user_input == "y"
-      print "How big do you want to make it? Enter a number greater than 4. \nKeep in mind, the larger you make it, the longer the game will be. \n>"
-      board_size = gets.chomp.to_i
-      @hooman = Player.new(board_size)
-      @cpu = Player.new(board_size)
-      run_game
-    elsif user_input == "n"
-      @hooman = Player.new
-      @cpu = Player.new
+    if user_input == 'y'
+      custom_game
+    elsif user_input == 'n'
       run_game
     else
-      puts "Do you listen??? Let's try again"
-      set_board_size
+      puts "You really don't listen huh?"
+      game_setup
     end
+  end
+
+  def custom_game
+    print "How big would you like to make your board? Please enter a number greater than 4 \n> "
+    @board_size = gets.chomp.to_i
+    until @board_size.class == Integer
+      print "Please enter a number, it's not that hard... \n> "
+      @board_size = gets.chomp.to_i
+    end
+
+    set_custom_ships
+    run_game
 
   end
 
+  def set_custom_ships
+    puts "Hokay, now it's time to build some ships"
+    @ships.clear
+    print "How many ships would you like to have? \n> "
+    ship_count = gets.chomp.to_i
+
+    loop_counter = 1
+    loop do
+      print "What would you like ship number #{loop_counter.to_s} to be called? \n> "
+      ship_name = gets.chomp.capitalize
+
+      print "How long do you want #{ship_name} to be? Please enter a number less than #{@board_size.to_s} \n> "
+      ship_length = gets.chomp.to_i
+
+      until ship_length <= @board_size
+        print "I told you LESS than #{@board_size.to_s}. Try again  \n> "
+        ship_length = gets.chomp.to_i
+      end
+      @ships[ship_name] = ship_length
+
+      loop_counter += 1
+      break if (loop_counter - 1) == ship_count
+    end
+    p @ships
+  end
+
+  # def set_board_size
+  #   print "The standard board is 4 columns and 4 rows. \nWould you like to make the board bigger? (y/n) \n> "
+  #   user_input = gets.chomp.downcase
+  #   if user_input == "y"
+  #     print "How big do you want to make it? Enter a number greater than 4. \nKeep in mind, the larger you make it, the longer the game will be. \n>"
+  #     board_size = gets.chomp.to_i
+  #     @hooman = Player.new(board_size)
+  #     @cpu = Player.new(board_size)
+  #     run_game
+  #   elsif user_input == "n"
+  #     @hooman = Player.new
+  #     @cpu = Player.new
+  #     run_game
+  #   else
+  #     puts "Do you listen??? Let's try again"
+  #     set_board_size
+  #   end
+  #
+  # end
+
   def run_game
+    @hooman = Player.new(@ships, @board_size)
+    @cpu = Player.new(@ships, @board_size)
     @cpu.cpu_place_ships
     @hooman.hooman_place_ships
     while !@cpu.ships_have_sunk? && !@hooman.ships_have_sunk?
