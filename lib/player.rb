@@ -61,7 +61,7 @@ class Player
       @board.place(ship, user_input)
       puts @board.render(true)
     else
-      print "Those are invalid coordinates. Please try again. \n>"
+      print "Those are invalid coordinates. Please try again. \n\u{1f644} "
       user_input = gets.chomp.upcase.split(" ")
       hooman_cell_placement(ship, user_input)
     end
@@ -70,15 +70,13 @@ class Player
   def hooman_shot_results(cell)
     shot_type = nil
     if cell.shots_fired > 1
-      shot_type =  "failure. You already fired there. Try again"
+      shot_type =  "failure. You already fired there. Try again \u{1f644}"
     elsif cell.render == "M"
       shot_type = "miss"
     elsif cell.render == "X"
       shot_type = "hit, the ship is sunk"
     elsif cell.render == "H"
       shot_type = "hit"
-    else
-      shot_type = "WTF PPL"
     end
     puts "Your shot on #{cell.coordinate} was a #{shot_type}."
   end
@@ -102,7 +100,7 @@ class Player
     shot_input = gets.chomp.upcase
     cell_shot = @board.cells.fetch(shot_input) if @board.valid_coordinate?(shot_input)
     if cell_shot == nil
-      puts "Please enter a valid coordinate."
+      puts "Please enter a valid coordinate \u{1f644}"
       hooman_fires_shot
     elsif cell_shot.shots_fired == 0
       cell_shot.fire_upon
@@ -118,14 +116,19 @@ class Player
     if find_cells_hit == []
       cpu_shot = @board.cells.keys.shuffle[3]
     else
-      until @board.valid_coordinate?(cpu_shot)
-        generate_adjacent_cells(find_cells_hit).each do |coord|
+      generate_adjacent_cells(find_cells_hit).each do |coord|
+        if @board.valid_coordinate?(coord) && !@board.cells[coord].fired_upon?
           cpu_shot = coord
         end
       end
     end
-    cell_shot = @board.cells.fetch(cpu_shot) if @board.valid_coordinate?(cpu_shot)
+
+    if @board.valid_coordinate?(cpu_shot)
+      cell_shot = @board.cells.fetch(cpu_shot)
+    end
+
     if cell_shot.shots_fired == 0
+      #got an error here "undefined method shots fired for nil:NilClass"
       cell_shot.fire_upon
       cpu_shot_results(cell_shot)
     else
