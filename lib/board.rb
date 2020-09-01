@@ -1,26 +1,25 @@
 require './lib/cell'
 
 class Board
-  attr_reader :cells, :letter_rows, :num_columns
+  attr_reader :cells
 
   def initialize(board_size = 4)
-    @letter_rows = board_size
-    @num_columns = board_size
+    @board_size = board_size
     @cells = build_cells
   end
 
   def build_cells
-    @cells = {}
-    num_range = (1..@num_columns).to_a
-    letter_range = ("A"..(("A".ord) + (@letter_rows - 1)).chr).to_a
+    cells = {}
+    num_range = (1..@board_size).to_a
+    letter_range = ("A"..(("A".ord) + (@board_size - 1)).chr).to_a
 
-     num_range.each do |num|
-      letter_range.each do |letter|
-        temp =  letter + num.to_s
-        @cells[temp] = Cell.new(temp)
+    letter_range.each do |letter|
+      num_range.each do |num|
+        coordinate =  letter + num.to_s
+        cells[coordinate] = Cell.new(coordinate)
       end
     end
-    @cells = (@cells.sort_by {|coord, cell| coord.split('')}).to_h
+    cells
   end
 
   def valid_coordinate?(cell)
@@ -83,12 +82,12 @@ class Board
   end
 
   def row_1_render
-    "  " + (1..@num_columns).to_a.map { |num| num.to_s.concat(" ") }.join
+    "  " + (1..@board_size).to_a.map { |num| num.to_s.concat(" ") }.join
   end
 
   def board_groups
-    (1..@letter_rows).to_a.map do |i|
-      @cells.keys[((@num_columns*i)-@num_columns)..((@num_columns*i)-1)]
+    (1..@board_size).to_a.map do |i|
+      @cells.keys[((@board_size*i)-@board_size)..((@board_size*i)-1)]
     end
   end
 
