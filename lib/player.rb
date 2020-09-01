@@ -49,23 +49,24 @@ class Player
   def hooman_place_ships
     puts "I have laid out my ships on the grid. \nYou now need to lay out your ships. \n"
     puts @board.render
+    place_ship_input
+  end
+
+  def place_ship_input
     @ships.each do |ship|
       print "Enter the squares for the #{ship.name} (#{ship.length.to_s} spaces): \n> "
       user_input = gets.strip.chomp.upcase.split(" ")
+      until @board.valid_placement?(ship, user_input)
+        print "Those are invalid coordinates. Please try again. \n\u{1f644} "
+        user_input = gets.strip.chomp.upcase.split(" ")
+      end
       hooman_cell_placement(ship, user_input)
     end
   end
 
-  def hooman_cell_placement(ship, user_input)
-    if @board.valid_placement?(ship, user_input)
-      @board.place(ship, user_input)
-      puts @board.render(true)
-    else
-
-      print "Those are invalid coordinates. Please try again. \n\u{1f644} "
-      user_input = gets.strip.chomp.upcase.split(" ")
-      hooman_cell_placement(ship, user_input)
-    end
+  def hooman_cell_placement(ship = Ship.new("Cruiser", 3), user_input = ["A1", "A2", "A3"])
+    @board.place(ship, user_input)
+    puts @board.render(true)
   end
 
   def hooman_shot_results(cell)
