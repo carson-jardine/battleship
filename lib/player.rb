@@ -13,33 +13,38 @@ class Player
     game_ships.map { |name, length| Ship.new(name, length) }
   end
 
-  def cell_placement(ship)
-    cons_num_place = setup_cpu_coords(ship)[0]
-    cons_letter_place = setup_cpu_coords(ship)[1]
-
-    if @board.valid_placement?(ship, cons_num_place)
-      @board.place(ship, cons_num_place)
-    elsif @board.valid_placement?(ship, cons_letter_place)
-      @board.place(ship, cons_letter_place)
+  def cell_placement(ship, cons_nums, cons_letters)
+    if @board.valid_placement?(ship, cons_nums)
+      @board.place(ship, cons_nums)
+    elsif @board.valid_placement?(ship, cons_letters)
+      @board.place(ship, cons_letters)
     else
-      cell_placement(ship)
+      setup_cpu_coords(ship)
     end
   end
 
   def setup_cpu_coords(ship)
-    initial_cell = @board.cells.keys.shuffle[0]
-    initial_letter = initial_cell.split('').shift
-    initial_number = initial_cell.split('')[1].to_i
+    initial_cell = @board.cells.keys.shuffle[0].split('')
+    initial_letter = initial_cell.shift
+    initial_number = initial_cell.last(initial_cell.count).join.to_i
+    cons_nums = find_cons_nums(ship, initial_number, initial_letter)
+    cons_letters = find_cons_letters(ship, initial_number, initial_letter)
+    cell_placement(ship, cons_nums, cons_letters)
+  end
+
+  def find_cons_nums(ship, initial_number, initial_letter)
     num_range = (initial_number..initial_number + (ship.length - 1)).to_a
-    cons_num_place = num_range.map { |num| initial_letter + num.to_s }
+    num_range.map { |num| initial_letter + num.to_s }
+  end
+
+  def find_cons_letters(ship, initial_number, initial_letter)
     ordinal_range = (initial_letter.ord..(initial_letter.ord + (ship.length - 1)))
     letter_range = ordinal_range.to_a.map {|ord_value| ord_value.chr}
-    cons_letter_place = letter_range.map { |letter| letter + initial_number.to_s }
-    return cons_num_place, cons_letter_place
+    letter_range.map { |letter| letter + initial_number.to_s }
   end
 
   def cpu_place_ships
-    @ships.each {|ship| cell_placement(ship)}
+    @ships.each {|ship| setup_cpu_coords(ship)}
   end
 
   def ships_have_sunk?
