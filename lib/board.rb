@@ -21,16 +21,21 @@ class Board
     cells
   end
 
+  def make_letters(set)
+    ("A"..(("A".ord) + (@board_size - (26 * (set-1)) - 1)).chr).to_a
+  end
+
   def moar_letters
     alpha_array = ("A".."Z").to_a
     rounds_needed = (@board_size / 26.0).ceil
     letters = []
     (1..rounds_needed).to_a.each do |set|
       if set == 1 && @board_size <= 26
-        letters << ("A"..(("A".ord) + (@board_size - (26 * (set-1)) - 1)).chr).to_a
-      else set > 1
-        make_letters = ("A"..(("A".ord) + (@board_size - (26 * (set-1)) - 1)).chr).to_a
-        make_letters.each do |second_letter|
+        letters << make_letters(set)
+      elsif set == 1
+        letters << make_letters(set)
+      elsif set > 1
+        make_letters(set).each do |second_letter|
           letters << (alpha_array[set - 2] + second_letter)
         end
       end
