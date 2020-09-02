@@ -24,23 +24,23 @@ class Player
   end
 
   def setup_cpu_coords(ship)
-    initial_cell = @board.cells.keys.shuffle[0].split('')
+    initial_cell = @board.cells.keys.shuffle[0].split('-')
     initial_letter = initial_cell.shift
-    initial_number = initial_cell.last(initial_cell.count).join.to_i
+    initial_number = initial_cell.last.to_i
     cons_nums = find_cons_nums(ship, initial_number, initial_letter)
     cons_letters = find_cons_letters(ship, initial_number, initial_letter)
     cell_placement(ship, cons_nums, cons_letters)
   end
 
   def find_cons_nums(ship, initial_number, initial_letter)
-    num_range = (initial_number..initial_number + (ship.length - 1)).to_a
-    num_range.map { |num| initial_letter + num.to_s }
+    num_range = (initial_number..(initial_number + (ship.length - 1))).to_a
+    num_range.map { |num| initial_letter + "-" + num.to_s }
   end
 
   def find_cons_letters(ship, initial_number, initial_letter)
     ordinal_range = (initial_letter.ord..(initial_letter.ord + (ship.length - 1)))
     letter_range = ordinal_range.to_a.map {|ord_value| ord_value.chr}
-    letter_range.map { |letter| letter + initial_number.to_s }
+    letter_range.map { |letter| letter + "-" + initial_number.to_s }
   end
 
   def cpu_place_ships
@@ -58,13 +58,30 @@ class Player
     puts @board.render(true)
   end
 
+  def coord_letter(coord)
+    split_coord = coord.split('-')
+    split_coord.first
+  end
+
+  def coord_num(coord)
+    split_coord = coord.split('-')
+    split_coord.last.to_i
+  end
+
+  def convert_input_coords(user_input)
+    initial = user_input.upcase.split(" ")
+    initial.map do |coord|
+      coord_letter(coord) + "-" + coord_num(coord)
+    end
+  end
+
   def place_ship_input
     @ships.each do |ship|
       print "Enter the squares for the #{ship.name} (#{ship.length.to_s} spaces): \n> "
-      user_input = gets.strip.chomp.upcase.split(" ")
+      user_input = convert_input_coords(gets.strip.chomp)
       until @board.valid_placement?(ship, user_input)
         print "Those are invalid coordinates. Please try again. \n\u{1f644} "
-        user_input = gets.strip.chomp.upcase.split(" ")
+        user_input = convert_input_coords(gets.strip.chomp)
       end
       hooman_cell_placement(ship, user_input)
     end
@@ -104,10 +121,10 @@ class Player
 
   def hooman_fires_shot
     print "Enter the coordinate for your shot: \n> "
-    shot_input = gets.strip.chomp.upcase
+    shot_input = convert_input_coords(gets.strip.chomp)
     until @board.valid_coordinate?(shot_input)
       print "Please enter a valid coordinate \n\u{1f644} "
-      shot_input = gets.strip.chomp.upcase
+      shot_input = convert_input_coords(gets.strip.chomp)
     end
     cell_shot = @board.cells.fetch(shot_input)
     hooman_fires_duplicated_shot?(cell_shot)
@@ -170,12 +187,12 @@ class Player
 
   def generate_adjacent_cells(coord_array)
     coord_array.map do |coord|
-      split_coord = coord.split('')
-      ord_letter = split_coord.first.ord
-      int_num = split_coord.last(split_coord.count-1).join.to_i
+      ord_letter = coord_letter(coord).ord
+      int_num = coord_num(coord)
       letters = [ord_letter.chr, ord_letter.chr, (ord_letter - 1).chr, (ord_letter + 1).chr]
-      numbers = [(int_num + 1).to_s, (int_num - 1).to_s, split_coord[1], split_coord[1]]
-      letters.zip(numbers).map { |coords| coords.join }
+      numbers = [(int_num + 1).to_s, (int_num - 1).to_s, int_num, int_num]
+      dashes = ["-", "-", "-", "-"]
+      letters.zip(dashes, numbers).map { |coords| coords.join }
     end.flatten
   end
 
