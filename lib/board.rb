@@ -115,27 +115,58 @@ class Board
     end
   end
 
-  # Need to update the spacing after the row letter to have double spaces for letters 1-26
   def rest_of_rows
-    if @board_size >= 10
-      board_groups.map do |group|
-        run = 0
-        "\n" + split_letter(group)[0] + " " +
-        @cells.values_at(*group).map do |cell_object|
-          run += 1
-          cell_object.render +
-          if run < 10
-            " "
-          else run >= 10
-            "  "
-          end
-        end.join
-      end
+    if @board_size >= 27
+      board_spacing_greater_26
+    elsif @board_size > 10
+      board_spacing_greater_10
     else
-      board_groups.map do |group|
-        "\n" + split_letter(group)[0] + " " +
-        @cells.values_at(*group).map { |cell_object| cell_object.render + " " }.join
-      end
+      board_spacing
+    end
+  end
+
+  def board_spacing
+    board_groups.map do |group|
+      "\n" + split_letter(group)[0] + " " +
+      @cells.values_at(*group).map { |cell_object| cell_object.render + " " }.join
+    end
+  end
+
+  def double_letter_spacing(group)
+    if split_letter(group)[0].length == 1
+      "  "
+    else
+      " "
+    end
+  end
+
+  def double_number_spacing(run)
+    if run < 10
+      " "
+    else run >= 10
+      "  "
+    end
+  end
+
+  def board_spacing_greater_26
+    board_groups.map do |group|
+      run = 0
+      "\n" + split_letter(group)[0] + double_letter_spacing(group) +
+      @cells.values_at(*group).map do |cell_object|
+        run += 1
+        cell_object.render + double_number_spacing(run)
+      end.join
+    end
+  end
+
+  def board_spacing_greater_10
+    board_groups.map do |group|
+      run = 0
+      "\n" + split_letter(group)[0] + " " +
+      @cells.values_at(*group).map do |cell_object|
+        run += 1
+        cell_object.render + double_number_spacing(run)
+      end.join
     end
   end
 
@@ -146,12 +177,7 @@ class Board
         "\n" + split_letter(group)[0] + " " +
         @cells.values_at(*group).map do |cell_object|
           run += 1
-          cell_object.render(true) +
-          if run < 10
-            " "
-          else run >= 10
-            "  "
-          end
+          cell_object.render + double_number_spacing(run)
         end.join
       end
     else
