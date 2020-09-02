@@ -27,10 +27,10 @@ class PlayerTest < Minitest::Test
   def test_hooman_can_place_ships
 
     @hooman.hooman_cell_placement
-    refute_nil @hooman.board.cells["A1"].ship
-    refute_nil @hooman.board.cells["A2"].ship
-    refute_nil @hooman.board.cells["A3"].ship
-    assert_nil @hooman.board.cells["B4"].ship
+    refute_nil @hooman.board.cells["A-1"].ship
+    refute_nil @hooman.board.cells["A-2"].ship
+    refute_nil @hooman.board.cells["A-3"].ship
+    assert_nil @hooman.board.cells["B-4"].ship
   end
 
   def test_check_if_player_ships_have_sunk
@@ -62,8 +62,8 @@ class PlayerTest < Minitest::Test
   end
 
   def test_cpu_can_take_adjacent_shot
-    @hooman.board.cells["A1"].place_ship(Ship.new("Cruiser", 3))
-    @hooman.board.cells["A1"].fire_upon
+    @hooman.board.cells["A-1"].place_ship(Ship.new("Cruiser", 3))
+    @hooman.board.cells["A-1"].fire_upon
     @hooman.cpu_fire_helper
 
     test_array = @hooman.board.cells.values.select do |cell|
@@ -73,16 +73,45 @@ class PlayerTest < Minitest::Test
       cell if !cell.fired_upon?
     end
 
-    assert_includes @hooman.generate_adjacent_cells(["A1"]), test_array[1].coordinate
+    assert_includes @hooman.generate_adjacent_cells(["A-1"]), test_array[1].coordinate
     assert_equal 1, test_array[0].shots_fired
     assert_equal false, bad_array[0].fired_upon?
   end
 
+  def test_cpu_can_take_adjacent_shot_on_larger_board
+    comp = Player.new({'Submarine' => 2, 'Cruiser' =>3 }, 28)
+    comp.board.cells["AA-1"].place_ship(comp.ships[1])
+    comp.board.cells["AA-1"].fire_upon
+    comp.cpu_fire_helper
+
+    assert_equal ["AA-2", "AA-0", "Z-1", "AB-1"], comp.generate_adjacent_cells(["AA-1"])
+  end
+
+  def test_cpu_can_take_adjacent_shot_using_z
+    comp = Player.new({'Submarine' => 2, 'Cruiser' =>3 }, 28)
+    comp.board.cells["Z-1"].place_ship(comp.ships[1])
+    comp.board.cells["Z-1"].fire_upon
+    comp.cpu_fire_helper
+
+    assert_equal ["Z-2", "Z-0", "Y-1", "AA-1"], comp.generate_adjacent_cells(["Z-1"])
+  end
+
   def test_hooman_can_take_a_turn
-    cell_1 = Cell.new("A1")
+    cell_1 = Cell.new("A-1")
     @cpu.hooman_take_shot(cell_1)
 
     assert cell_1.fired_upon?
+  end
+
+  def test_user_input_coords_successfully_converted
+    user_input = "a1 a2 a3"
+    assert_equal ["A-1", "A-2", "A-3"], @hooman.convert_input_coords(user_input)
+
+    user_input2 = "aa1 ab1"
+    assert_equal ["AA-1", "AB-1"], @hooman.convert_input_coords(user_input2)
+
+    user_input3 = "ab22 ab23"
+    assert_equal ["AB-22", "AB-23"], @hooman.convert_input_coords(user_input3)
   end
 
 end

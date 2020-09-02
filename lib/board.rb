@@ -11,15 +11,39 @@ class Board
   def build_cells
     cells = {}
     num_range = (1..@board_size).to_a
-    letter_range = ("A"..(("A".ord) + (@board_size - 1)).chr).to_a
 
-    letter_range.each do |letter|
+    moar_letters.each do |letter|
       num_range.each do |num|
-        coordinate =  letter + num.to_s
+        coordinate = letter + "-" + num.to_s
         cells[coordinate] = Cell.new(coordinate)
       end
     end
     cells
+  end
+
+  def make_letters(set)
+    if @board_size - (26 * (set-1)) > 26
+      remainder = 26
+    else
+      remainder = @board_size - (26 * (set-1))
+    end
+    ("A"..(("A".ord) + (remainder - 1)).chr).to_a
+  end
+
+  def moar_letters
+    alpha_array = ("A".."Z").to_a
+    rounds_needed = (@board_size / 26.0).ceil
+    letters = []
+    (1..rounds_needed).to_a.each do |set|
+      if set == 1
+        letters << make_letters(set)
+      elsif set > 1
+        make_letters(set).each do |second_letter|
+          letters << (alpha_array[set - 2] + second_letter)
+        end
+      end
+    end
+    letters.flatten
   end
 
   def valid_coordinate?(cell)
@@ -34,11 +58,11 @@ class Board
   end
 
   def split_letter(coord_array)
-    coord_array.map { |coord| coord.split('').shift }
+    coord_array.map { |coord| coord.split('-').shift }
   end
 
   def split_num(coord_array)
-    coord_array.map { |coord| (coord.split('')[1]).to_i }
+    coord_array.map { |coord| (coord.split('-')[1]).to_i }
   end
 
   def same_letter_cons_num?(coord_array)
@@ -92,48 +116,96 @@ class Board
   end
 
   def rest_of_rows
-    if @board_size >= 10
-      board_groups.map do |group|
-        run = 0
-        "\n" + split_letter(group)[0] + " " +
-        @cells.values_at(*group).map do |cell_object|
-          run += 1
-          cell_object.render +
-          if run < 10
-            " "
-          else run >= 10
-            "  "
-          end
-        end.join
-      end
+    if @board_size >= 27
+      board_spacing_greater_26
+    elsif @board_size > 10
+      board_spacing_greater_10
     else
-      board_groups.map do |group|
-        "\n" + split_letter(group)[0] + " " +
-        @cells.values_at(*group).map { |cell_object| cell_object.render + " " }.join
-      end
+      board_spacing
+    end
+  end
+
+  def board_spacing
+    board_groups.map do |group|
+      "\n" + split_letter(group)[0] + " " +
+      @cells.values_at(*group).map { |cell_object| cell_object.render + " " }.join
+    end
+  end
+
+  def board_spacing_true
+    board_groups.map do |group|
+      "\n" + split_letter(group)[0] + " " +
+      @cells.values_at(*group).map { |cell_object| cell_object.render(true) + " " }.join
+    end
+  end
+
+  def double_letter_spacing(group)
+    if split_letter(group)[0].length == 1
+      "  "
+    else
+      " "
+    end
+  end
+
+  def double_number_spacing(run)
+    if run < 10
+      " "
+    else run >= 10
+      "  "
+    end
+  end
+
+  def board_spacing_greater_26
+    board_groups.map do |group|
+      run = 0
+      "\n" + split_letter(group)[0] + double_letter_spacing(group) +
+      @cells.values_at(*group).map do |cell_object|
+        run += 1
+        cell_object.render + double_number_spacing(run)
+      end.join
+    end
+  end
+
+  def board_spacing_greater_26_true
+    board_groups.map do |group|
+      run = 0
+      "\n" + split_letter(group)[0] + double_letter_spacing(group) +
+      @cells.values_at(*group).map do |cell_object|
+        run += 1
+        cell_object.render(true) + double_number_spacing(run)
+      end.join
+    end
+  end
+
+  def board_spacing_greater_10
+    board_groups.map do |group|
+      run = 0
+      "\n" + split_letter(group)[0] + " " +
+      @cells.values_at(*group).map do |cell_object|
+        run += 1
+        cell_object.render + double_number_spacing(run)
+      end.join
+    end
+  end
+
+  def board_spacing_greater_10_true
+    board_groups.map do |group|
+      run = 0
+      "\n" + split_letter(group)[0] + " " +
+      @cells.values_at(*group).map do |cell_object|
+        run += 1
+        cell_object.render(true) + double_number_spacing(run)
+      end.join
     end
   end
 
   def rest_of_rows_show_ship_true
-    if @board_size >= 10
-      board_groups.map do |group|
-        run = 0
-        "\n" + split_letter(group)[0] + " " +
-        @cells.values_at(*group).map do |cell_object|
-          run += 1
-          cell_object.render(true) +
-          if run < 10
-            " "
-          else run >= 10
-            "  "
-          end
-        end.join
-      end
+    if @board_size >= 27
+      board_spacing_greater_26_true
+    elsif @board_size > 10
+      board_spacing_greater_10_true
     else
-      board_groups.map do |group|
-        "\n" + split_letter(group)[0] + " " +
-        @cells.values_at(*group).map { |cell_object| cell_object.render(true) + " " }.join
-      end
+      board_spacing_true
     end
   end
 
