@@ -18,13 +18,6 @@ class Board
         cells[coordinate] = Cell.new(coordinate)
       end
     end
-
-    # letter_range.each do |letter|
-    #   num_range.each do |num|
-    #     coordinate =  letter + num.to_s
-    #     cells[coordinate] = Cell.new(coordinate)
-    #   end
-    # end
     cells
   end
 
@@ -43,10 +36,6 @@ class Board
       end
     end
     letters.flatten
-    # if @board_size > 26
-    #   ("A"..(("A".ord) + (@board_size - 1)).chr).to_a
-    # else
-    #   ("A"..(("A".ord) + (@board_size - 1)).chr).to_a
   end
 
   def valid_coordinate?(cell)
