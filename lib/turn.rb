@@ -109,7 +109,7 @@ class Turn
 
   def find_cells_hit
     cpu_hits_cells = @hooman.board.cells.values.select do |cell|
-      cell if cell.fired_upon? && cell.empty? == false && cell.ship.sunk? == false
+      cell if cell.fired_upon? && !cell.empty? && !cell.ship.sunk?
     end
     cpu_hits_cells.map do |cell|
       @hooman.board.cells.key(cell)
