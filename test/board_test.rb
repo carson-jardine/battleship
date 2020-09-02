@@ -30,6 +30,7 @@ class BoardTest < Minitest::Test
     board2 = Board.new(125)
     assert_equal "BB-8", board2.cells["BB-8"].coordinate
     assert_equal "AB-3", board2.cells["AB-3"].coordinate
+    assert_equal "A-1", board2.cells.first[0]
   end
 
   def test_has_valid_coordinates
