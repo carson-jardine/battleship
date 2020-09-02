@@ -88,6 +88,12 @@ class PlayerTest < Minitest::Test
   def test_user_input_coords_successfully_converted
     user_input = "a1 a2 a3"
     assert_equal ["A-1", "A-2", "A-3"], @hooman.convert_input_coords(user_input)
+
+    user_input2 = "aa1 ab1"
+    assert_equal ["AA-1", "AB-1"], @hooman.convert_input_coords(user_input2)
+
+    user_input3 = "ab22 ab23"
+    assert_equal ["AB-22", "AB-23"], @hooman.convert_input_coords(user_input3)
   end
 
 end
