@@ -208,14 +208,38 @@ class Player
     end
   end
 
+  def generate_adjactent_letters(coord)
+    ord_letter_array = coord_letter(coord).split('').map { |letter| letter.ord }
+    same_double = ord_letter_array.map { |ord| ord.chr }.join
+    if ord_letter_array[0] == 90 && ord_letter_array.count == 1
+      letters = [ord_letter_array[0].chr, ord_letter_array[0].chr, (ord_letter_array[0] - 1).chr, "AA"]
+    elsif ord_letter_array.count == 1
+      letters = [ord_letter_array[0].chr, ord_letter_array[0].chr, (ord_letter_array[0] - 1).chr, (ord_letter_array[0] + 1).chr]
+    elsif ord_letter_array[0] == 65 && ord_letter_array[1] == 65
+      plus_one = [ord_letter_array[0].chr, (ord_letter_array[1] + 1).chr].join
+      letters = [same_double, same_double, "Z", plus_one]
+    elsif ord_letter_array[1] == 90
+      plus_one = [(ord_letter_array[0] + 1).chr, "A"].join
+      minus_one = [ord_letter_array[0].chr, (ord_letter_array[1] - 1).chr].join
+      letters = [same_double, same_double, minus_one, plus_one]
+    elsif ord_letter_array[1] == 65
+      plus_one = [ord_letter_array[0].chr, (ord_letter_array[1] + 1).chr].join
+      minus_one = [(ord_letter_array[0] + 1).chr, "Z".chr].join
+      letters = [same_double, same_double, minus_one, plus_one]
+    else
+      plus_one = [ord_letter_array[0].chr, (ord_letter_array[1] + 1).chr].join
+      minus_one = [ord_letter_array[0].chr, (ord_letter_array[1] - 1).chr].join
+      letters = [same_double, same_double, minus_one, plus_one]
+    end
+    letters
+  end
+
   def generate_adjacent_cells(coord_array)
     coord_array.map do |coord|
-      ord_letter = coord_letter(coord).ord
       int_num = coord_num(coord)
-      letters = [ord_letter.chr, ord_letter.chr, (ord_letter - 1).chr, (ord_letter + 1).chr]
       numbers = [(int_num + 1).to_s, (int_num - 1).to_s, int_num, int_num]
       dashes = ["-", "-", "-", "-"]
-      letters.zip(dashes, numbers).map { |coords| coords.join }
+      generate_adjactent_letters(coord).zip(dashes, numbers).map { |coords| coords.join }
     end.flatten
   end
 
