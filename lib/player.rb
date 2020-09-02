@@ -144,10 +144,10 @@ class Player
 
   def hooman_fires_shot
     print "Enter the coordinate for your shot: \n> "
-    shot_input = convert_input_coords(gets.strip.chomp)
+    shot_input = convert_input_coords(gets.strip.chomp)[0]
     until @board.valid_coordinate?(shot_input)
       print "Please enter a valid coordinate \n\u{1f644} "
-      shot_input = convert_input_coords(gets.strip.chomp)
+      shot_input = convert_input_coords(gets.strip.chomp)[0]
     end
     cell_shot = @board.cells.fetch(shot_input)
     hooman_fires_duplicated_shot?(cell_shot)
