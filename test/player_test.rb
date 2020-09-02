@@ -27,10 +27,10 @@ class PlayerTest < Minitest::Test
   def test_hooman_can_place_ships
 
     @hooman.hooman_cell_placement
-    refute_nil @hooman.board.cells["A1"].ship
-    refute_nil @hooman.board.cells["A2"].ship
-    refute_nil @hooman.board.cells["A3"].ship
-    assert_nil @hooman.board.cells["B4"].ship
+    refute_nil @hooman.board.cells["A-1"].ship
+    refute_nil @hooman.board.cells["A-2"].ship
+    refute_nil @hooman.board.cells["A-3"].ship
+    assert_nil @hooman.board.cells["B-4"].ship
   end
 
   def test_check_if_player_ships_have_sunk
@@ -62,8 +62,8 @@ class PlayerTest < Minitest::Test
   end
 
   def test_cpu_can_take_adjacent_shot
-    @hooman.board.cells["A1"].place_ship(Ship.new("Cruiser", 3))
-    @hooman.board.cells["A1"].fire_upon
+    @hooman.board.cells["A-1"].place_ship(Ship.new("Cruiser", 3))
+    @hooman.board.cells["A-1"].fire_upon
     @hooman.cpu_fire_helper
 
     test_array = @hooman.board.cells.values.select do |cell|
@@ -73,13 +73,13 @@ class PlayerTest < Minitest::Test
       cell if !cell.fired_upon?
     end
 
-    assert_includes @hooman.generate_adjacent_cells(["A1"]), test_array[1].coordinate
+    assert_includes @hooman.generate_adjacent_cells(["A-1"]), test_array[1].coordinate
     assert_equal 1, test_array[0].shots_fired
     assert_equal false, bad_array[0].fired_upon?
   end
 
   def test_hooman_can_take_a_turn
-    cell_1 = Cell.new("A1")
+    cell_1 = Cell.new("A-1")
     @cpu.hooman_take_shot(cell_1)
 
     assert cell_1.fired_upon?
