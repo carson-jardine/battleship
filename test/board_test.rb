@@ -1,8 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/board'
-require './lib/ship'
-require './lib/cell'
 require './lib/player'
 
 class BoardTest < Minitest::Test
@@ -71,8 +69,8 @@ class BoardTest < Minitest::Test
   end
 
   def test_invalid_input
-  assert_equal false, @board.valid_placement?(@submarine, ["Z-1", "Z-2"])
-  assert_equal false, @board.valid_placement?(@cruiser, ["D-1", "E-1", "F-1"])
+    assert_equal false, @board.valid_placement?(@submarine, ["Z-1", "Z-2"])
+    assert_equal false, @board.valid_placement?(@cruiser, ["D-1", "E-1", "F-1"])
   end
 
   def test_it_can_place_a_ship_on_board
