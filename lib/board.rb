@@ -22,7 +22,12 @@ class Board
   end
 
   def make_letters(set)
-    ("A"..(("A".ord) + (@board_size - (26 * (set-1)) - 1)).chr).to_a
+    if @board_size - (26 * (set-1)) > 26
+      remainder = 26
+    else
+      remainder = @board_size - (26 * (set-1))
+    end
+    ("A"..(("A".ord) + (remainder - 1)).chr).to_a
   end
 
   def moar_letters
@@ -30,9 +35,7 @@ class Board
     rounds_needed = (@board_size / 26.0).ceil
     letters = []
     (1..rounds_needed).to_a.each do |set|
-      if set == 1 && @board_size <= 26
-        letters << make_letters(set)
-      elsif set == 1
+      if set == 1
         letters << make_letters(set)
       elsif set > 1
         make_letters(set).each do |second_letter|
