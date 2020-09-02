@@ -78,6 +78,24 @@ class PlayerTest < Minitest::Test
     assert_equal false, bad_array[0].fired_upon?
   end
 
+  def test_cpu_can_take_adjacent_shot_on_larger_board
+    comp = Player.new({'Submarine' => 2, 'Cruiser' =>3 }, 28)
+    comp.board.cells["AA-1"].place_ship(comp.ships[1])
+    comp.board.cells["AA-1"].fire_upon
+    comp.cpu_fire_helper
+
+    assert_equal ["AA-2", "AA-0", "Z-1", "AB-1"], comp.generate_adjacent_cells(["AA-1"])
+  end
+
+  def test_cpu_can_take_adjacent_shot_using_z
+    comp = Player.new({'Submarine' => 2, 'Cruiser' =>3 }, 28)
+    comp.board.cells["Z-1"].place_ship(comp.ships[1])
+    comp.board.cells["Z-1"].fire_upon
+    comp.cpu_fire_helper
+
+    assert_equal ["Z-2", "Z-0", "Y-1", "AA-1"], comp.generate_adjacent_cells(["Z-1"])
+  end
+
   def test_hooman_can_take_a_turn
     cell_1 = Cell.new("A-1")
     @cpu.hooman_take_shot(cell_1)
