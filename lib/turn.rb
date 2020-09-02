@@ -24,30 +24,26 @@ class Turn
 
   def hooman_shot_results(cell)
     shot_type = nil
-    if cell.shots_fired > 1
-      shot_type =  "failure. You already fired there. Try again \u{1f644}"
-    elsif cell.render == "M"
-      shot_type = "miss"
+    if cell.render == "M"
+      shot_type = "MISS, sucks to suck"
     elsif cell.render == "X"
-      shot_type = "hit, the ship is sunk"
+      shot_type = "hit, the ship is SUNK. I hope you're happy \u{1F62D}"
     elsif cell.render == "H"
-      shot_type = "hit"
+      shot_type = "HIT, stop cheating!!!!"
     end
-    puts "Your shot on #{cell.coordinate} was a #{shot_type}."
+    puts "Your shot on #{cell.coordinate} was a #{shot_type}"
   end
 
   def cpu_shot_results(cell)
     shot_type = nil
     if cell.render == "M"
-      shot_type = "miss"
+      shot_type = "MISS grrrrr"
     elsif cell.render == "X"
-      shot_type = "hit, the ship is sunk"
+      shot_type = "hit, the ship is SUNK MUAHAHAHA"
     elsif cell.render == "H"
-      shot_type = "hit"
-    else
-      shot_type = "WTF PPL"
+      shot_type = "HIT, I'm coming for youuuuu"
     end
-    puts "My shot on #{cell.coordinate} was a #{shot_type}."
+    puts "My shot on #{cell.coordinate} was a #{shot_type}"
   end
 
   def hooman_fires_shot
@@ -59,17 +55,17 @@ class Turn
     end
     cell_shot = @cpu.board.cells.fetch(shot_input)
     hooman_fires_duplicated_shot?(cell_shot)
-    hooman_shot_results(cell_shot)
   end
 
   def hooman_fires_duplicated_shot?(cell_shot)
     if cell_shot.shots_fired > 0
-      cell_shot.fire_upon
-      hooman_shot_results(cell_shot)
+      puts "Your shot on #{cell_shot.coordinate} was a failure. You already fired there, idiot. TRY AGAIN \u{1f644}"
       hooman_fires_shot
     else
       hooman_take_shot(cell_shot)
+      hooman_shot_results(cell_shot)
     end
+
   end
 
   def hooman_take_shot(cell_shot)
@@ -79,7 +75,7 @@ class Turn
   def cpu_fires_zee_missle
     cell_shot = cpu_fire_helper
     cpu_shot_results(cell_shot)
-    sleep(1)
+    sleep(1.5)
   end
 
   def cpu_fire_helper
