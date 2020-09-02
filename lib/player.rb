@@ -70,7 +70,7 @@ class Player
     end
   end
 
-  def hooman_cell_placement(ship = Ship.new("Cruiser", 3), user_input = ["A1", "A2", "A3"])
+  def hooman_cell_placement(ship = Ship.new("Cruiser", 3), user_input = ["A-1", "A-2", "A-3"])
     @board.place(ship, user_input)
   end
 
