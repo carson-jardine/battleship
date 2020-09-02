@@ -29,6 +29,7 @@ class Board
   end
 
   def moar_letters
+    letters = []
     (1..((@board_size / 26.0).ceil)).to_a.each do |set|
       if set == 1
         letters << make_letters(set)
