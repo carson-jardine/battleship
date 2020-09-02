@@ -10,10 +10,8 @@ class Board
 
   def build_cells
     cells = {}
-    num_range = (1..@board_size).to_a
-
     moar_letters.each do |letter|
-      num_range.each do |num|
+      (1..@board_size).to_a.each do |num|
         coordinate = letter + "-" + num.to_s
         cells[coordinate] = Cell.new(coordinate)
       end
@@ -31,15 +29,13 @@ class Board
   end
 
   def moar_letters
-    alpha_array = ("A".."Z").to_a
-    rounds_needed = (@board_size / 26.0).ceil
     letters = []
-    (1..rounds_needed).to_a.each do |set|
+    (1..((@board_size / 26.0).ceil)).to_a.each do |set|
       if set == 1
         letters << make_letters(set)
       elsif set > 1
         make_letters(set).each do |second_letter|
-          letters << (alpha_array[set - 2] + second_letter)
+          letters << (("A".."Z").to_a[set - 2] + second_letter)
         end
       end
     end
@@ -75,7 +71,9 @@ class Board
   def same_num_cons_letter?(coord_array)
     first_num = split_num(coord_array)[0]
     same_num = split_num(coord_array).all? { |num| num == first_num }
-    cons_letter = split_letter(coord_array).each_cons(2).all? { |x, y| x.ord == y.ord - 1 }
+    cons_letter = split_letter(coord_array).each_cons(2).all? do |x, y|
+      moar_letters.find_index(x) == moar_letters.find_index(y) - 1
+    end
     same_num && cons_letter
   end
 
@@ -98,10 +96,10 @@ class Board
   end
 
   def render(show_ship = false)
-    unless show_ship == true
-      return row_1_render + rest_of_rows.join + "\n"
+    if show_ship == true
+      row_1_render + rest_of_rows(true).join + "\n"
     else
-      return row_1_render + rest_of_rows_show_ship_true.join + "\n"
+      row_1_render + rest_of_rows.join + "\n"
     end
   end
 
@@ -115,27 +113,20 @@ class Board
     end
   end
 
-  def rest_of_rows
+  def rest_of_rows(show_ship = false)
     if @board_size >= 27
-      board_spacing_greater_26
+      board_spacing_greater_26(show_ship)
     elsif @board_size > 10
-      board_spacing_greater_10
+      board_spacing_greater_10(show_ship)
     else
-      board_spacing
+      board_spacing(show_ship)
     end
   end
 
-  def board_spacing
+  def board_spacing(show_ship = false)
     board_groups.map do |group|
       "\n" + split_letter(group)[0] + " " +
-      @cells.values_at(*group).map { |cell_object| cell_object.render + " " }.join
-    end
-  end
-
-  def board_spacing_true
-    board_groups.map do |group|
-      "\n" + split_letter(group)[0] + " " +
-      @cells.values_at(*group).map { |cell_object| cell_object.render(true) + " " }.join
+      @cells.values_at(*group).map { |cell_object| cell_object.render(show_ship) + " " }.join
     end
   end
 
@@ -155,57 +146,25 @@ class Board
     end
   end
 
-  def board_spacing_greater_26
+  def board_spacing_greater_26(show_ship = false)
     board_groups.map do |group|
       run = 0
       "\n" + split_letter(group)[0] + double_letter_spacing(group) +
       @cells.values_at(*group).map do |cell_object|
         run += 1
-        cell_object.render + double_number_spacing(run)
+        cell_object.render(show_ship) + double_number_spacing(run)
       end.join
     end
   end
 
-  def board_spacing_greater_26_true
-    board_groups.map do |group|
-      run = 0
-      "\n" + split_letter(group)[0] + double_letter_spacing(group) +
-      @cells.values_at(*group).map do |cell_object|
-        run += 1
-        cell_object.render(true) + double_number_spacing(run)
-      end.join
-    end
-  end
-
-  def board_spacing_greater_10
+  def board_spacing_greater_10(show_ship = false)
     board_groups.map do |group|
       run = 0
       "\n" + split_letter(group)[0] + " " +
       @cells.values_at(*group).map do |cell_object|
         run += 1
-        cell_object.render + double_number_spacing(run)
+        cell_object.render(show_ship) + double_number_spacing(run)
       end.join
-    end
-  end
-
-  def board_spacing_greater_10_true
-    board_groups.map do |group|
-      run = 0
-      "\n" + split_letter(group)[0] + " " +
-      @cells.values_at(*group).map do |cell_object|
-        run += 1
-        cell_object.render(true) + double_number_spacing(run)
-      end.join
-    end
-  end
-
-  def rest_of_rows_show_ship_true
-    if @board_size >= 27
-      board_spacing_greater_26_true
-    elsif @board_size > 10
-      board_spacing_greater_10_true
-    else
-      board_spacing_true
     end
   end
 
