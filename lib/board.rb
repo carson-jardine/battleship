@@ -10,10 +10,8 @@ class Board
 
   def build_cells
     cells = {}
-    num_range = (1..@board_size).to_a
-
     moar_letters.each do |letter|
-      num_range.each do |num|
+      (1..@board_size).to_a.each do |num|
         coordinate = letter + "-" + num.to_s
         cells[coordinate] = Cell.new(coordinate)
       end
@@ -31,15 +29,12 @@ class Board
   end
 
   def moar_letters
-    alpha_array = ("A".."Z").to_a
-    rounds_needed = (@board_size / 26.0).ceil
-    letters = []
-    (1..rounds_needed).to_a.each do |set|
+    (1..((@board_size / 26.0).ceil)).to_a.each do |set|
       if set == 1
         letters << make_letters(set)
       elsif set > 1
         make_letters(set).each do |second_letter|
-          letters << (alpha_array[set - 2] + second_letter)
+          letters << (("A".."Z").to_a[set - 2] + second_letter)
         end
       end
     end
