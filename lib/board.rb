@@ -100,10 +100,10 @@ class Board
   end
 
   def render(show_ship = false)
-    unless show_ship == true
-      return row_1_render + rest_of_rows.join + "\n"
+    if show_ship == true
+      row_1_render + rest_of_rows(true).join + "\n"
     else
-      return row_1_render + rest_of_rows_show_ship_true.join + "\n"
+      row_1_render + rest_of_rows.join + "\n"
     end
   end
 
@@ -117,27 +117,20 @@ class Board
     end
   end
 
-  def rest_of_rows
+  def rest_of_rows(show_ship = false)
     if @board_size >= 27
-      board_spacing_greater_26
+      board_spacing_greater_26(show_ship)
     elsif @board_size > 10
-      board_spacing_greater_10
+      board_spacing_greater_10(show_ship)
     else
-      board_spacing
+      board_spacing(show_ship)
     end
   end
 
-  def board_spacing
+  def board_spacing(show_ship = false)
     board_groups.map do |group|
       "\n" + split_letter(group)[0] + " " +
-      @cells.values_at(*group).map { |cell_object| cell_object.render + " " }.join
-    end
-  end
-
-  def board_spacing_true
-    board_groups.map do |group|
-      "\n" + split_letter(group)[0] + " " +
-      @cells.values_at(*group).map { |cell_object| cell_object.render(true) + " " }.join
+      @cells.values_at(*group).map { |cell_object| cell_object.render(show_ship) + " " }.join
     end
   end
 
@@ -157,57 +150,25 @@ class Board
     end
   end
 
-  def board_spacing_greater_26
+  def board_spacing_greater_26(show_ship = false)
     board_groups.map do |group|
       run = 0
       "\n" + split_letter(group)[0] + double_letter_spacing(group) +
       @cells.values_at(*group).map do |cell_object|
         run += 1
-        cell_object.render + double_number_spacing(run)
+        cell_object.render(show_ship) + double_number_spacing(run)
       end.join
     end
   end
 
-  def board_spacing_greater_26_true
-    board_groups.map do |group|
-      run = 0
-      "\n" + split_letter(group)[0] + double_letter_spacing(group) +
-      @cells.values_at(*group).map do |cell_object|
-        run += 1
-        cell_object.render(true) + double_number_spacing(run)
-      end.join
-    end
-  end
-
-  def board_spacing_greater_10
+  def board_spacing_greater_10(show_ship = false)
     board_groups.map do |group|
       run = 0
       "\n" + split_letter(group)[0] + " " +
       @cells.values_at(*group).map do |cell_object|
         run += 1
-        cell_object.render + double_number_spacing(run)
+        cell_object.render(show_ship) + double_number_spacing(run)
       end.join
-    end
-  end
-
-  def board_spacing_greater_10_true
-    board_groups.map do |group|
-      run = 0
-      "\n" + split_letter(group)[0] + " " +
-      @cells.values_at(*group).map do |cell_object|
-        run += 1
-        cell_object.render(true) + double_number_spacing(run)
-      end.join
-    end
-  end
-
-  def rest_of_rows_show_ship_true
-    if @board_size >= 27
-      board_spacing_greater_26_true
-    elsif @board_size > 10
-      board_spacing_greater_10_true
-    else
-      board_spacing_true
     end
   end
 
