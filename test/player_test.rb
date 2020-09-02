@@ -112,6 +112,9 @@ class PlayerTest < Minitest::Test
 
     user_input3 = "ab22 ab23"
     assert_equal ["AB-22", "AB-23"], @hooman.convert_input_coords(user_input3)
+
+    user_input4 = "a15"
+    assert_equal ["A-15"], @hooman.convert_input_coords(user_input4)
   end
 
 end

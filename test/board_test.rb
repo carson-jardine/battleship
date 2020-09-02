@@ -39,6 +39,9 @@ class BoardTest < Minitest::Test
     assert_equal false, @board.valid_coordinate?("A-5")
     assert_equal false, @board.valid_coordinate?("E-1")
     assert_equal false, @board.valid_coordinate?("A-22")
+
+    board = Board.new(15)
+    assert board.valid_coordinate?("A-15")
   end
 
   def test_valid_length_placement
