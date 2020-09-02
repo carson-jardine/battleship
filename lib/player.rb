@@ -61,19 +61,34 @@ class Player
   def coord_letter(coord)
     if coord.include?("-")
       split_coord = coord.split('-')
+      split_coord.first.upcase
     else
       split_coord = coord.split('')
+      letters = []
+      split_coord.each do |character|
+        if !(48 .. 57).include?(character.ord)
+          letters << character
+        end
+      end
+      letters.join.upcase
     end
-    split_coord.first.upcase
+
   end
 
   def coord_num(coord)
     if coord.include?("-")
       split_coord = coord.split('-')
+      split_coord.last.to_i
     else
       split_coord = coord.split('')
+      nums = []
+      split_coord.each do |character|
+        if (48 .. 57).include?(character.ord)
+          nums << character
+        end
+      end
+      nums.join.to_i
     end
-    split_coord.last.to_i
   end
 
   def convert_input_coords(user_input)
