@@ -1,7 +1,6 @@
 require './lib/player'
 require './lib/turn'
 
-
 class Game
   attr_reader :board_size, :ships
 

@@ -1,9 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/pride'
-require './lib/cell'
 require './lib/player'
-require './lib/turn'
-
 
 class PlayerTest < Minitest::Test
 

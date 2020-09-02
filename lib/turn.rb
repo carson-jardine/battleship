@@ -73,7 +73,7 @@ class Turn
   end
 
   def hooman_take_shot(cell_shot)
-      cell_shot.fire_upon
+    cell_shot.fire_upon
   end
 
   def cpu_fires_zee_missle
@@ -104,7 +104,7 @@ class Turn
         cpu_shot = coord if @hooman.board.valid_coordinate?(coord) && !@hooman.board.cells[coord].fired_upon?
       end
     end
-      cell_shot = @hooman.board.cells.fetch(cpu_shot)
+    cell_shot = @hooman.board.cells.fetch(cpu_shot)
   end
 
   def find_cells_hit
