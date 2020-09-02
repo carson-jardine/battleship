@@ -2,4 +2,4 @@
 ## A game by the *DREAM TEAM*:
 ### Kate Tester and Carson Jardine
 
-![cat](https://giphy.com/gifs/C9x8gX02SnMIoAClXa.gif)
+![sometext](https://media.giphy.com/media/C9x8gX02SnMIoAClXa/giphy-downsized.gif)
