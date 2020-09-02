@@ -115,6 +115,7 @@ class Board
     end
   end
 
+  # Need to update the spacing after the row letter to have double spaces for letters 1-26
   def rest_of_rows
     if @board_size >= 10
       board_groups.map do |group|
