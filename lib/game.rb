@@ -40,7 +40,7 @@ class Game
   end
 
   def custom_game
-    print "How big would you like to make your board? Please enter a number greater than 4 \n> "
+    print "How big would you like to make your board? Please enter a number greater than 3 \n> "
 
     @board_size = gets.strip.chomp.to_i
 
@@ -53,36 +53,73 @@ class Game
     run_game
   end
 
+  # def set_custom_ships
+  #   puts "Hokay, now it's time to build some ships"
+  #   @ships.clear
+  #   print "How many ships would you like to have? \n> "
+  #   ship_count = gets.strip.chomp.to_i
+  #
+  #   until ship_count != 0
+  #     print "Please enter a number, it's not that hard... \n\u{1f644} "
+  #     ship_count= gets.strip.chomp.to_i
+  #   end
+  #   ##### write new method for this long ass shit
+  #   loop_counter = 1
+  #   loop do
+  #     print "What would you like ship number #{loop_counter.to_s} to be called? \n> "
+  #     ship_name = gets.strip.chomp.capitalize
+  #
+  #     print "How long do you want #{ship_name} to be? Please enter a number less than #{@board_size.to_s} \n> "
+  #     ship_length = gets.strip.chomp.to_i
+  #
+  #     until ship_length != 0
+  #       print "Please enter a number, it's not that hard... \n\u{1f644} "
+  #       ship_length = gets.chomp.to_i
+  #     end
+  #
+  #     until ship_length <= @board_size
+  #       print "I told you LESS than #{@board_size.to_s}. Try again  \n\u{1f644} "
+  #       ship_length = gets.strip.chomp.to_i
+  #     end
+  #     @ships[ship_name] = ship_length
+  #
+  #     loop_counter += 1
+  #     break if (loop_counter - 1) == ship_count
+  #   end
+  # end
+
   def set_custom_ships
     puts "Hokay, now it's time to build some ships"
     @ships.clear
+    custom_ship_input
+  end
+
+  def custom_ship_input
     print "How many ships would you like to have? \n> "
     ship_count = gets.strip.chomp.to_i
-
     until ship_count != 0
       print "Please enter a number, it's not that hard... \n\u{1f644} "
-      ship_count= gets.strip.chomp.to_i
+      ship_count = gets.strip.chomp.to_i
     end
-    ##### write new method for this long ass shit
+    custom_loop(ship_count)
+  end
+
+  def custom_loop(ship_count)
     loop_counter = 1
     loop do
       print "What would you like ship number #{loop_counter.to_s} to be called? \n> "
       ship_name = gets.strip.chomp.capitalize
-
       print "How long do you want #{ship_name} to be? Please enter a number less than #{@board_size.to_s} \n> "
       ship_length = gets.strip.chomp.to_i
-
       until ship_length != 0
         print "Please enter a number, it's not that hard... \n\u{1f644} "
-        ship_length = gets.chomp.to_i
+        ship_length = gets.strip.chomp.to_i
       end
-
       until ship_length <= @board_size
         print "I told you LESS than #{@board_size.to_s}. Try again  \n\u{1f644} "
         ship_length = gets.strip.chomp.to_i
       end
       @ships[ship_name] = ship_length
-
       loop_counter += 1
       break if (loop_counter - 1) == ship_count
     end
