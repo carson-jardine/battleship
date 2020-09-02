@@ -85,4 +85,9 @@ class PlayerTest < Minitest::Test
     assert cell_1.fired_upon?
   end
 
+  def test_user_input_coords_successfully_converted
+    user_input = "a1 a2 a3"
+    assert_equal ["A-1", "A-2", "A-3"], @hooman.convert_input_coords(user_input)
+  end
+
 end

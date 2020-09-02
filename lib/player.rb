@@ -59,19 +59,27 @@ class Player
   end
 
   def coord_letter(coord)
-    split_coord = coord.split('-')
-    split_coord.first
+    if coord.include?("-")
+      split_coord = coord.split('-')
+    else
+      split_coord = coord.split('')
+    end
+    split_coord.first.upcase
   end
 
   def coord_num(coord)
-    split_coord = coord.split('-')
+    if coord.include?("-")
+      split_coord = coord.split('-')
+    else
+      split_coord = coord.split('')
+    end
     split_coord.last.to_i
   end
 
   def convert_input_coords(user_input)
-    initial = user_input.upcase.split(" ")
+    initial = user_input.split(" ")
     initial.map do |coord|
-      coord_letter(coord) + "-" + coord_num(coord)
+      coord_letter(coord) + "-" + coord_num(coord).to_s
     end
   end
 
