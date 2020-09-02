@@ -9,9 +9,9 @@ class Turn
   end
 
   def game_turn
+    display_boards
     hooman_fires_shot
     cpu_fires_zee_missle
-    display_boards
   end
 
   def display_boards
