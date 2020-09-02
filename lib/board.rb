@@ -132,6 +132,13 @@ class Board
     end
   end
 
+  def board_spacing_true
+    board_groups.map do |group|
+      "\n" + split_letter(group)[0] + " " +
+      @cells.values_at(*group).map { |cell_object| cell_object.render(true) + " " }.join
+    end
+  end
+
   def double_letter_spacing(group)
     if split_letter(group)[0].length == 1
       "  "
@@ -159,6 +166,17 @@ class Board
     end
   end
 
+  def board_spacing_greater_26_true
+    board_groups.map do |group|
+      run = 0
+      "\n" + split_letter(group)[0] + double_letter_spacing(group) +
+      @cells.values_at(*group).map do |cell_object|
+        run += 1
+        cell_object.render(true) + double_number_spacing(run)
+      end.join
+    end
+  end
+
   def board_spacing_greater_10
     board_groups.map do |group|
       run = 0
@@ -170,21 +188,24 @@ class Board
     end
   end
 
+  def board_spacing_greater_10_true
+    board_groups.map do |group|
+      run = 0
+      "\n" + split_letter(group)[0] + " " +
+      @cells.values_at(*group).map do |cell_object|
+        run += 1
+        cell_object.render(true) + double_number_spacing(run)
+      end.join
+    end
+  end
+
   def rest_of_rows_show_ship_true
-    if @board_size >= 10
-      board_groups.map do |group|
-        run = 0
-        "\n" + split_letter(group)[0] + " " +
-        @cells.values_at(*group).map do |cell_object|
-          run += 1
-          cell_object.render + double_number_spacing(run)
-        end.join
-      end
+    if @board_size >= 27
+      board_spacing_greater_26_true
+    elsif @board_size > 10
+      board_spacing_greater_10_true
     else
-      board_groups.map do |group|
-        "\n" + split_letter(group)[0] + " " +
-        @cells.values_at(*group).map { |cell_object| cell_object.render(true) + " " }.join
-      end
+      board_spacing_true
     end
   end
 
