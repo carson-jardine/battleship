@@ -11,15 +11,42 @@ class Board
   def build_cells
     cells = {}
     num_range = (1..@board_size).to_a
-    letter_range = ("A"..(("A".ord) + (@board_size - 1)).chr).to_a
 
-    letter_range.each do |letter|
+    moar_letters.each do |letter|
       num_range.each do |num|
-        coordinate =  letter + num.to_s
+        coordinate = letter + "-" + num.to_s
         cells[coordinate] = Cell.new(coordinate)
       end
     end
+
+    # letter_range.each do |letter|
+    #   num_range.each do |num|
+    #     coordinate =  letter + num.to_s
+    #     cells[coordinate] = Cell.new(coordinate)
+    #   end
+    # end
     cells
+  end
+
+  def moar_letters
+    alpha_array = ("A".."Z").to_a
+    rounds_needed = (@board_size / 26.0).ceil
+    letters = []
+    (1..rounds_needed).to_a.each do |set|
+      if set == 1 && @board_size <= 26
+        letters << ("A"..(("A".ord) + (@board_size - (26 * (set-1)) - 1)).chr).to_a
+      else set > 1
+        make_letters = ("A"..(("A".ord) + (@board_size - (26 * (set-1)) - 1)).chr).to_a
+        make_letters.each do |second_letter|
+          letters << (alpha_array[set - 2] + second_letter)
+        end
+      end
+    end
+    letters.flatten
+    # if @board_size > 26
+    #   ("A"..(("A".ord) + (@board_size - 1)).chr).to_a
+    # else
+    #   ("A"..(("A".ord) + (@board_size - 1)).chr).to_a
   end
 
   def valid_coordinate?(cell)
@@ -34,11 +61,11 @@ class Board
   end
 
   def split_letter(coord_array)
-    coord_array.map { |coord| coord.split('').shift }
+    coord_array.map { |coord| coord.split('-').shift }
   end
 
   def split_num(coord_array)
-    coord_array.map { |coord| (coord.split('')[1]).to_i }
+    coord_array.map { |coord| (coord.split('-')[1]).to_i }
   end
 
   def same_letter_cons_num?(coord_array)
