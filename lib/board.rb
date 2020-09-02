@@ -75,7 +75,9 @@ class Board
   def same_num_cons_letter?(coord_array)
     first_num = split_num(coord_array)[0]
     same_num = split_num(coord_array).all? { |num| num == first_num }
-    cons_letter = split_letter(coord_array).each_cons(2).all? { |x, y| x.ord == y.ord - 1 }
+    cons_letter = split_letter(coord_array).each_cons(2).all? do |x, y|
+      moar_letters.find_index(x) == moar_letters.find_index(y) - 1
+    end
     same_num && cons_letter
   end
 
