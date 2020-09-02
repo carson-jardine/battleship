@@ -1,4 +1,5 @@
 require './lib/player'
+require './lib/turn'
 
 class Game
   attr_reader :board_size, :ships
@@ -8,6 +9,7 @@ class Game
     @ships = {'Cruiser' => 3, 'Submarine' => 2}
     @hooman = nil
     @cpu = nil
+    @turn = Turn.new
   end
 
   def start
@@ -54,14 +56,21 @@ class Game
   def set_custom_ships
     puts "Hokay, now it's time to build some ships"
     @ships.clear
+    custom_ship_input
+  end
+
+  def custom_ship_input
     print "How many ships would you like to have? \n> "
     ship_count = gets.strip.chomp.to_i
 
     until ship_count != 0
       print "Please enter a number, it's not that hard... \n\u{1f644} "
-      ship_count= gets.strip.chomp.to_i
+      ship_count = gets.strip.chomp.to_i
     end
-    ##### write new method for this long ass shit
+    custom_loop(ship_count)
+  end
+
+  def custom_loop(ship_count)
     loop_counter = 1
     loop do
       print "What would you like ship number #{loop_counter.to_s} to be called? \n> "
@@ -72,15 +81,15 @@ class Game
 
       until ship_length != 0
         print "Please enter a number, it's not that hard... \n\u{1f644} "
-        ship_length = gets.chomp.to_i
+        ship_length = gets.strip.chomp.to_i
       end
 
       until ship_length <= @board_size
         print "I told you LESS than #{@board_size.to_s}. Try again  \n\u{1f644} "
         ship_length = gets.strip.chomp.to_i
       end
-      @ships[ship_name] = ship_length
 
+      @ships[ship_name] = ship_length
       loop_counter += 1
       break if (loop_counter - 1) == ship_count
     end
@@ -92,7 +101,7 @@ class Game
     @cpu.cpu_place_ships
     @hooman.hooman_place_ships
     while !@cpu.ships_have_sunk? && !@hooman.ships_have_sunk?
-      turn
+      @turn.game_turn
     end
     end_game
   end
@@ -100,37 +109,38 @@ class Game
   def end_game
     if @cpu.ships_have_sunk? && @hooman.ships_have_sunk?
       puts "Let's call this a tie."
-      initialize
-      start
+      endend_game_helper
     elsif @cpu.ships_have_sunk?
       puts "Wowwww you beat a computer, you're sooooo smart \u{1f644}"
-      initialize
-      sleep(1)
-      start
+      endend_game_helper
     elsif @hooman.ships_have_sunk?
       puts "I won! SUCK IT"
-      initialize
-      sleep(1)
-      start
+      endend_game_helper
     else
       puts "You broke the game, idiot \u{1f644}"
     end
   end
 
-  def turn
-    display_boards
-    @cpu.hooman_fires_shot
-    @hooman.cpu_fires_zee_missle
-  end
+def endend_game_helper
+  initialize
+  sleep(1)
+  start
+end
 
-  def display_boards
-    system "clear"
-    puts "\n \n"
-    puts "=============COMPUTER BOARD============="
-    print @cpu.board.render(true)
-    puts "\n"
-    puts "==============HOOMAN BOARD=============="
-    print @hooman.board.render(true)
-  end
+  # def turn
+  #   display_boards
+  #   @cpu.hooman_fires_shot
+  #   @hooman.cpu_fires_zee_missle
+  # end
+  #
+  # def display_boards
+  #   system "clear"
+  #   puts "\n \n"
+  #   puts "=============COMPUTER BOARD============="
+  #   print @cpu.board.render
+  #   puts "\n"
+  #   puts "==============HOOMAN BOARD=============="
+  #   print @hooman.board.render(true)
+  # end
 
 end
